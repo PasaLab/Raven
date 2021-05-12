@@ -22,6 +22,8 @@ class tpch(workload):
         if self.conf['upload']['to'] == 'hdfs':
             src = self.conf['upload']['path']
             files = self.conf['upload']['files']
+            command = 'hadoop fs -mkdir -p /tpch'
+            subprocess_popen(command)
             for file in files:
                 command = 'hadoop fs -moveFromLocal ' + src + '/' + file + ' /tpch'
                 subprocess_popen(command)
