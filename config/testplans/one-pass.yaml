@@ -2,7 +2,7 @@ offline:
   name: offline
   description: offline stage
   commands:
-    - path: /home/experiment/wutongyu/tpch-kit/dbgen
+    - path: /home/hadoop/tpch-kit/dbgen
       command: ls
 online:
   name: online
