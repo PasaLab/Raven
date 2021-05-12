@@ -1,0 +1,49 @@
+switch:
+  generate: true
+  upload: true
+  create: true
+  load: true
+config:
+  generate:
+    path: /home/hadoop/tpch-kit/dbgen
+    command: ./dbgen -s 1 -f
+  create:
+    sql:
+      - create table nation ( n_nationkey integer , n_name char(25) , n_regionkey integer , n_comment varchar(152)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+      - create table region ( r_regionkey integer , r_name char(25) , r_comment varchar(152)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+      - create table part ( p_partkey integer , p_name varchar(55) , p_mfgr char(25) , p_brand char(10) , p_type varchar(25) , p_size integer , p_container char(10) , p_retailprice DECIMAL(15,2) , p_comment varchar(23) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+      - create table supplier ( s_suppkey integer , s_name char(25) , s_address varchar(40) , s_nationkey integer , s_phone char(15) , s_acctbal DECIMAL(15,2) , s_comment varchar(101) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+      - create table partsupp ( ps_partkey integer , ps_suppkey integer , ps_availqty integer , ps_supplycost DECIMAL(15,2) , ps_comment varchar(199) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+      - create table customer ( c_custkey integer , c_name varchar(25) , c_address varchar(40) , c_nationkey integer , c_phone char(15) , c_acctbal DECIMAL(15,2) , c_mktsegment char(10) , c_comment varchar(117) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+      - create table orders ( o_orderkey bigint , o_custkey integer , o_orderstatus char(1) , o_totalprice DECIMAL(15,2) , o_orderdate date , o_orderpriority char(15) , o_clerk char(15) , o_shippriority integer , o_comment varchar(79) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+      - create table lineitem ( l_orderkey bigint , l_partkey integer , l_suppkey integer , l_linenumber integer , l_quantity DECIMAL(15,2) , l_extendedprice DECIMAL(15,2) , l_discount DECIMAL(15,2) , l_tax DECIMAL(15,2) , l_returnflag char(1) , l_linestatus char(1) , l_shipdate date , l_commitdate date , l_receiptdate date , l_shipinstruct char(25) , l_shipmode char(10) , l_comment varchar(44) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
+  upload:
+    to: hdfs
+    path: /home/hadoop/tpch-kit/dbgen
+    files:
+      - nation.tbl
+      - region.tbl
+      - part.tbl
+      - supplier.tbl
+      - partsupp.tbl
+      - customer.tbl
+      - orders.tbl
+      - lineitem.tbl
+  load:
+    sql:
+      - LOAD DATA INPATH '/tpch/nation.tbl' INTO TABLE nation
+      - LOAD DATA INPATH '/tpch/customer.tbl' INTO TABLE customer
+      - LOAD DATA INPATH '/tpch/region.tbl' INTO TABLE region
+      - LOAD DATA INPATH '/tpch/part.tbl' INTO TABLE part
+      - LOAD DATA INPATH '/tpch/supplier.tbl' INTO TABLE supplier
+      - LOAD DATA INPATH '/tpch/partsupp.tbl' INTO TABLE partsupp
+      - LOAD DATA INPATH '/tpch/orders.tbl' INTO TABLE orders
+      - LOAD DATA INPATH '/tpch/lineitem.tbl' INTO TABLE lineitem
+query:
+  sql:
+    - name: Q1
+      description: Query 1
+      sql: select l_returnflag, l_linestatus, sum(l_quantity) as sum_qty, sum(l_extendedprice) as sum_base_price, sum(l_extendedprice * (1 - l_discount)) as sum_disc_price, sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)) as sum_charge, avg(l_quantity) as avg_qty, avg(l_extendedprice) as avg_price, avg(l_discount) as avg_disc, count(*) as count_order from lineitem where l_shipdate <= date '1998-12-01' - interval '90' day group by l_returnflag, l_linestatus order by l_returnflag, l_linestatus
+    - name: Q2
+      description: Query 2
+      sql: select s_acctbal, s_name, n_name, p_partkey, p_mfgr, s_address, s_phone, s_comment from part, supplier, partsupp, nation, region where p_partkey = ps_partkey and s_suppkey = ps_suppkey and p_size = 10 and p_type like 'LARGE' and s_nationkey = n_nationkey and n_regionkey = r_regionkey and r_name = 'ASIA' and ps_supplycost = ( select min(ps_supplycost) from partsupp, supplier, nation, region where p_partkey = ps_partkey and s_suppkey = ps_suppkey and s_nationkey = n_nationkey and n_regionkey = r_regionkey and r_name = 'ASIA' ) order by s_acctbal desc, n_name, s_name, p_partkey limit 100

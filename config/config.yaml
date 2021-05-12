@@ -1,0 +1,4 @@
+engine: spark-sql
+workload: tpc-h
+test_plan: one-pass
+metrics: time-based
