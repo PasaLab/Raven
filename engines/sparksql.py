@@ -12,29 +12,26 @@ class sparksql(engine):
         self.session = None
         self.sql = None
         self.metrics = {}
+        self.logger = Logger('./log/benchmark.log', 'engine')
 
     def launch(self):
-        # initialize logger
-        logger = Logger('./log/benchmark.log', 'engine')
-        logger.info("Launching spark-sql...")
+        self.logger.info("Launching spark-sql...")
         self.session = SparkSession.builder\
             .config(conf=self.conf)\
             .enableHiveSupport()\
             .getOrCreate()
-        logger.info("Launch spark-sql complete.")
+        self.logger.info("Launch spark-sql complete.")
 
     def query(self, sql):
-        # initialize logger
-        logger = Logger('./log/benchmark.log')
         self.sql = sql
         if self.session is not None:
             start = time.time()
             df = self.session.sql(self.sql).show()
             end = time.time()
-            logger.info("Success: execution complete")
+            self.logger.info("Success: execution complete")
             return end - start
         else:
-            logger.info("Failed on query: no session available.")
+            self.logger.info("Failed on query: no session available.")
             return -1
 
     def stop(self):
