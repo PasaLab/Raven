@@ -66,11 +66,6 @@ def run():
             logger.info("Creating data tables successful!")
         else:
             logger.info("Creating data tables skipped!")
-        if conf['switch']['upload'] is True:
-            workload.upload()
-            logger.info("Upload data to Hive successful!")
-        else:
-            logger.info("Creating data tables skipped!")
         if conf['switch']['load'] is True:
             workload.load(engine)
             logger.info("Loading data to warehouse successful!")

@@ -1,6 +1,5 @@
 switch:
   generate: true
-  upload: true
   create: true
   load: true
 config:
@@ -17,28 +16,25 @@ config:
       - create table customer ( c_custkey integer , c_name varchar(25) , c_address varchar(40) , c_nationkey integer , c_phone char(15) , c_acctbal DECIMAL(15,2) , c_mktsegment char(10) , c_comment varchar(117) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
       - create table orders ( o_orderkey bigint , o_custkey integer , o_orderstatus char(1) , o_totalprice DECIMAL(15,2) , o_orderdate date , o_orderpriority char(15) , o_clerk char(15) , o_shippriority integer , o_comment varchar(79) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
       - create table lineitem ( l_orderkey bigint , l_partkey integer , l_suppkey integer , l_linenumber integer , l_quantity DECIMAL(15,2) , l_extendedprice DECIMAL(15,2) , l_discount DECIMAL(15,2) , l_tax DECIMAL(15,2) , l_returnflag char(1) , l_linestatus char(1) , l_shipdate date , l_commitdate date , l_receiptdate date , l_shipinstruct char(25) , l_shipmode char(10) , l_comment varchar(44) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
-  upload:
-    to: hdfs
-    path: /home/hadoop/tpch-kit/dbgen
-    files:
-      - nation.tbl
-      - region.tbl
-      - part.tbl
-      - supplier.tbl
-      - partsupp.tbl
-      - customer.tbl
-      - orders.tbl
-      - lineitem.tbl
   load:
-    sql:
-      - LOAD DATA INPATH '/tpch/nation.tbl' INTO TABLE nation
-      - LOAD DATA INPATH '/tpch/customer.tbl' INTO TABLE customer
-      - LOAD DATA INPATH '/tpch/region.tbl' INTO TABLE region
-      - LOAD DATA INPATH '/tpch/part.tbl' INTO TABLE part
-      - LOAD DATA INPATH '/tpch/supplier.tbl' INTO TABLE supplier
-      - LOAD DATA INPATH '/tpch/partsupp.tbl' INTO TABLE partsupp
-      - LOAD DATA INPATH '/tpch/orders.tbl' INTO TABLE orders
-      - LOAD DATA INPATH '/tpch/lineitem.tbl' INTO TABLE lineitem
+    path: /home/hadoop/tpch-kit/dbgen
+    tables:
+      - load: nation.tbl
+        as: nation
+      - load: region.tbl
+        as: region
+      - load: part.tbl
+        as: part
+      - load: supplier.tbl
+        as: supplier
+      - load: partsupp.tbl
+        as: partsupp
+      - load: customer.tbl
+        as: customer
+      - load: orders.tbl
+        as: orders
+      - load: lineitem.tbl
+        as: lineitem
 query:
   sql:
     - name: Q1
