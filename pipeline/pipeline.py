@@ -15,7 +15,7 @@ class Pipeline:
         self.context.setQueries(queries)
         if len(self.valves) == 0:
             # initialize logger
-            logger = Logger('./log/benchmark.log', __name__)
+            logger = Logger('./log/benchmark.log', 'pipeline')
             logger.error("No valves available!")
         else:
             self.context.call(self.valves[self.get_first_valve_id()])

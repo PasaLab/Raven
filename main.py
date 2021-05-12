@@ -5,7 +5,7 @@ from lib.popen import subprocess_popen
 
 def run():
     # initialize logger
-    logger = Logger('./log/benchmark.log')
+    logger = Logger('./log/benchmark.log', 'main')
 
     # 0. Read yaml and check validity
     global_conf_file = open("config/config.yaml", encoding="UTF-8")

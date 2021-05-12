@@ -15,7 +15,7 @@ class sparksql(engine):
 
     def launch(self):
         # initialize logger
-        logger = Logger('./log/benchmark.log', __name__)
+        logger = Logger('./log/benchmark.log', 'engine')
         logger.info("Launching spark-sql...")
         self.session = SparkSession.builder\
             .config(conf=self.conf)\
