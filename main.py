@@ -131,67 +131,6 @@ def run():
     logger.info("Benchmark finished.")
     logger.info("--------------------------------")
 
-def run_on_aws():
-    # initialize logger
-    logger = Logger('./log/benchmark.log', __name__)
-
-    # 0. Read yaml and check validity
-    global_conf_file = open("config/config.yaml", encoding="UTF-8")
-    global_conf = yaml.load(global_conf_file, Loader=yaml.FullLoader)
-
-    try:
-        if global_conf['engine'] not in ['spark-sql', 'custom']:
-            logger.error("Failed: invalid engine type")
-            return
-        if global_conf['workload'] not in ['tpc-h', 'custom']:
-            logger.error("Failed: invalid workload type")
-            return
-        if global_conf['test_plan'] not in ['one-pass', 'custom']:
-            logger.error("Failed: invalid test plan type")
-            return
-        if global_conf['metrics'] not in ['time-based', 'custom']:
-            logger.error("Failed: invalid metrics type")
-            return
-    except KeyError:
-        logger.error("Failed: incomplete key-value pairs")
-        return
-
-    # 1. Generate the workload
-    logger.info("Generating workload...")
-    if global_conf['workload'] == 'tpc-h':
-        conf_file = open("config/workloads/tpch.yaml", encoding="UTF-8")
-        conf = yaml.load(conf_file, Loader=yaml.FullLoader)
-        from workloads.tpch import tpch
-        workload = tpch()
-        workload.set_switch(conf['switch'])
-        workload.set_conf(conf['config'])
-        if conf['switch']['generate'] is True:
-            workload.generate()
-            logger.info("Data successfully generated!")
-        else:
-            logger.info("Data generation skipped!")
-        if conf['switch']['upload'] is True:
-            workload.upload()
-            logger.info("Data successfully uploaded!")
-        else:
-            logger.info("Data upload skipped!")
-
-    # 2. Initialize an EMR cluster
-    with open("./cloud/cluster.sh", "r") as f:
-        statement = f.read()
-        subprocess_popen(statement)
-
-    # 3. Connect to the EMR cluster
-
-    # 4. Launch the engine
-
-    # 5. Generate the execution plan
-
-    # 6. Execution and metrics acquisition
-
-    # 7. Overhead calculation
-
-
 if __name__ == '__main__':
-    # run()
-    run_on_aws()
+    run()
+    # run_on_aws()
