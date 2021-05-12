@@ -1,7 +1,7 @@
 import yaml
 from testplans.testplan import Testplan
 from lib.Logger import Logger
-from lib.popen import subprocess_popen
+
 
 def run():
     # initialize logger
@@ -130,6 +130,7 @@ def run():
         logger.info("Total overhead: " + str(total))
     logger.info("Benchmark finished.")
     logger.info("--------------------------------")
+
 
 if __name__ == '__main__':
     run()
