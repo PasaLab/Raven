@@ -35,7 +35,6 @@ def run():
         conf = yaml.load(conf_file, Loader=yaml.FullLoader)
         from engines.sparksql import sparksql
         engine = sparksql()
-        engine.set_app_name(conf['name'])
         try:
             engine.set_conf(conf['config'])
         except KeyError:

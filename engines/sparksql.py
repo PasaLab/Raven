@@ -42,9 +42,6 @@ class sparksql(engine):
         SparkSession.stop()
         self.session = None
 
-    def set_app_name(self, name):
-        self.conf.setAppName(name)
-
     def set_conf(self, conf):
         for key, value in conf.items():
             self.conf.set(key, value)
