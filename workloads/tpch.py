@@ -22,7 +22,7 @@ class tpch(workload):
         src = self.conf['load']['path']
         tables = self.conf['load']['tables']
         for table in tables:
-            sql = "LOAD DATA INPATH '" + src + "/" + table['load'] + "' INTO TABLE " + table['as']
+            sql = "LOAD DATA LOCAL INPATH '" + src + "/" + table['load'] + "' INTO TABLE " + table['as']
             engine.query(sql)
             self.logger.info("Successfully uploaded " + table['load'] + "as" + table['as'] + ".")
 

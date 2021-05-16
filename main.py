@@ -40,7 +40,8 @@ def run():
             engine.set_conf(conf['config'])
         except KeyError:
             engine.set_conf({})
-        engine.launch()
+        internal_dns = 'ip-172-31-23-64.ap-southeast-1.compute.internal'
+        engine.launch(internal_dns)
     else:
         from engines.engine import engine
         engine = engine()
