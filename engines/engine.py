@@ -8,7 +8,7 @@ class engine(object):
         self.conf = None
 
     @abstractmethod
-    def launch(self, internal_dns):
+    def launch(self):
         pass
 
     @abstractmethod
