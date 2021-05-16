@@ -95,43 +95,10 @@ def run():
     # 4. Execution and metrics acquisition
     logger.info("Executing queries...")
     plan.start(engine, workload.get_query())
-    logger.info("Executing finished! Acquiring metrics...")
-    logger.info("--------------------------------")
-
-    # 5. Overhead calculation
-    logger.info("Calculating overhead...")
-    offline_metrics, online_metrics = plan.get_metrics()
-    if global_conf['metrics'] == 'time-based':
-        conf_file = open("config/metrics/time-based.yaml", encoding="UTF-8")
-        conf = yaml.load(conf_file, Loader=yaml.FullLoader)
-        offline_time = 0
-        online_time = 0
-        for offline_metric in offline_metrics:
-            for query in offline_metric:
-                offline_time += query['time']
-        for online_metric in online_metrics:
-            for query in online_metric:
-                online_time += query['time']
-        time = offline_time
-        offline_calculation_overhead = eval(str(conf['offline']['calculation']['eval']))
-        offline_delay_overhead = eval(str(conf['offline']['delay']['eval']))
-        time = online_time
-        online_calculation_overhead = eval(str(conf['online']['calculation']['eval']))
-        online_delay_overhead = eval(str(conf['online']['delay']['eval']))
-        logger.info("Offline calculation: " + str(offline_calculation_overhead))
-        logger.info("Offline delay: " + str(offline_delay_overhead))
-        logger.info("Offline total: " + str(offline_calculation_overhead + offline_delay_overhead))
-        logger.info("Online calculation: " + str(online_calculation_overhead))
-        logger.info("Online delay: " + str(online_delay_overhead))
-        logger.info("Online total: " + str(online_calculation_overhead + online_delay_overhead))
-        offline = offline_calculation_overhead + offline_delay_overhead
-        online = online_calculation_overhead + online_delay_overhead
-        total = eval(str(conf['total']['eval']))
-        logger.info("Total overhead: " + str(total))
-    logger.info("Benchmark finished.")
+    logger.info("Execution finished!")
+    logger.info("Please acquire metrics on the monitor.")
     logger.info("--------------------------------")
 
 
 if __name__ == '__main__':
     run()
-    # run_on_aws()
