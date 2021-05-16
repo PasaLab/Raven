@@ -26,7 +26,7 @@ class sparksql(engine):
         self.sql = sql
         if self.session is not None:
             start = time.time()
-            df = self.session.sql(self.sql).show()
+            df = self.session.sql(self.sql)
             end = time.time()
             self.logger.info("Success: execution complete")
             return end - start

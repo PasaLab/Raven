@@ -75,7 +75,7 @@ def run():
     else:
         from workloads.workload import workload
         workload = workload()
-    logger.info("Generating workload successful!")
+    logger.info("Workload generated!")
     logger.info("--------------------------------")
 
     # 3. Generate the execution plan
