@@ -4,7 +4,6 @@ from lib.Logger import Logger
 from lib.popen import subprocess_popen
 
 
-logger = Logger('./log/benchmark.log', 'monitor')
 def prepare():
     # 0. Initialize boto3 clients
     emr = boto3.client('emr',
@@ -18,17 +17,15 @@ def prepare():
 
     # 1. Create an EMR cluster on AWS
     logger.info("Creating the EMR cluster...")
-    with open("./cloud/cluster.sh",'r') as f:
+    with open("./cloud/cluster.sh", 'r') as f:
         cmd = f.read()
         res = subprocess_popen(cmd)
-    cluster_id = res[1][res[1].find("j-"):len(res[1])-2]
-    logger.info("Cluster created! Cluster ID is " + cluster_id + ".")
+    cid = res[1][res[1].find("j-"):len(res[1])-2]
+    logger.info("Cluster created! Cluster ID is " + cid + ".")
 
     # 2. Check if all EC2 instances are ready
     logger.info("Creating EC2 instances for the cluster...")
     found_flag = False
-    masters = []
-    cores = []
     while found_flag is False:
         time.sleep(15)
         masters = []
@@ -41,7 +38,7 @@ def prepare():
                 is_instance = False
                 for tag in instance['Tags']:
                     if tag['Key'] == 'aws:elasticmapreduce:job-flow-id':
-                        if tag['Value'] == cluster_id:
+                        if tag['Value'] == cid:
                             is_instance = True
                 if is_instance:
                     for tag in instance['Tags']:
@@ -54,7 +51,7 @@ def prepare():
             found_flag = True
         else:
             logger.info("MASTERs to create: " + str(masters_to_find - len(masters)) + ", "
-                         + "COREs to create: " + str(cores_to_find - len(cores)) + ".")
+                        + "COREs to create: " + str(cores_to_find - len(cores)) + ".")
     logger.info("All instances are created! Starting cluster...")
     logger.info("It may take up to 10 minutes to start a cluster.")
 
@@ -73,7 +70,7 @@ def prepare():
     return cluster_id
 
 
-def get_metrics(cluster_id):
+def get_metrics(cid):
     ec2 = boto3.client('ec2',
                        region_name='ap-southeast-1',
                        aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
@@ -84,7 +81,7 @@ def get_metrics(cluster_id):
             is_instance = False
             for tag in instance['Tags']:
                 if tag['Key'] == 'aws:elasticmapreduce:job-flow-id':
-                    if tag['Value'] == cluster_id:
+                    if tag['Value'] == cid:
                         is_instance = True
             if is_instance:
                 get_metrics_from_cwa(instance)
@@ -174,5 +171,6 @@ def get_metrics_from_cwa(instance):
 
 
 if __name__ == '__main__':
+    logger = Logger('./log/benchmark.log', 'monitor')
     cluster_id = prepare()
     # get_metrics(cluster_id)
