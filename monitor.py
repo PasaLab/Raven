@@ -29,9 +29,9 @@ def prepare():
     while found_flag is False:
         time.sleep(15)
         masters = []
-        cores = []
+        slaves = []
         masters_to_find = 1
-        cores_to_find = 2
+        slaves_to_find = 2
         reservations = ec2.describe_instances()
         for reservation in reservations['Reservations']:
             for instance in reservation['Instances']:
@@ -46,12 +46,21 @@ def prepare():
                             if tag['Value'] == 'MASTER':
                                 masters.append(instance)
                             else:
-                                cores.append(instance)
-        if len(masters) == masters_to_find and len(cores) == cores_to_find:
+                                slaves.append(instance)
+        if len(masters) == masters_to_find and len(slaves) == slaves_to_find:
+            with open("./cloud/instances.csv", 'w') as f:
+                for instance in masters:
+                    print(str(instance['ImageId'] + ', ' + instance['InstanceId'] + ', '
+                              + instance['InstanceType'] + ', ' + instance['KeyName'] + ', '
+                              + instance['PublicDnsName'] + ', ' + instance['PrivateDnsName']), file=f)
+                for instance in slaves:
+                    print(str(instance['ImageId'] + ', ' + instance['InstanceId'] + ', '
+                              + instance['InstanceType'] + ', ' + instance['KeyName'] + ', '
+                              + instance['PublicDnsName'] + ', ' + instance['PrivateDnsName']), file=f)
             found_flag = True
         else:
             logger.info("MASTERs to create: " + str(masters_to_find - len(masters)) + ", "
-                        + "COREs to create: " + str(cores_to_find - len(cores)) + ".")
+                        + "SLAVEs to create: " + str(slaves_to_find - len(slaves)) + ".")
     logger.info("All instances are created! Starting cluster...")
     logger.info("It may take up to 10 minutes to start a cluster.")
 
