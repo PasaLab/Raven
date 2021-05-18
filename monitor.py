@@ -70,7 +70,109 @@ def prepare():
                     logger.info("Cluster starting, please wait...")
                     break
     logger.info("Cluster started!")
+    return cluster_id
+
+
+def get_metrics(cluster_id):
+    ec2 = boto3.client('ec2',
+                       region_name='ap-southeast-1',
+                       aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
+                       aws_secret_access_key='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')
+    reservations = ec2.describe_instances()
+    for reservation in reservations['Reservations']:
+        for instance in reservation['Instances']:
+            is_instance = False
+            for tag in instance['Tags']:
+                if tag['Key'] == 'aws:elasticmapreduce:job-flow-id':
+                    if tag['Value'] == cluster_id:
+                        is_instance = True
+            if is_instance:
+                get_metrics_from_cwa(instance)
+
+
+def get_metrics_from_cwa(instance):
+    cw = boto3.client('cloudwatch',
+                      region_name='ap-southeast-1',
+                      aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
+                      aws_secret_access_key='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')
+    t = time.time()
+    response = cw.get_metric_data(
+        StartTime=int(t) - 3600,
+        EndTime=int(t) - 0,
+        MetricDataQueries=[
+            {
+                "Id": "m1",
+                "Label": "cpu_usage_user",
+                "MetricStat": {
+                    "Metric": {
+                        "Namespace": "CWAgent",
+                        "MetricName": "cpu_usage_user",
+                        "Dimensions": [
+                            {
+                                "Name": "InstanceId",
+                                "Value": instance['InstanceId']
+                            },
+                            {
+                                "Name": "ImageId",
+                                "Value": instance['ImageId']
+                            },
+                            {
+                                "Name": "InstanceType",
+                                "Value": instance['InstanceType']
+                            },
+                            {
+                                "Name": "cpu",
+                                "Value": "cpu0"
+                            }
+                        ]
+                    },
+                    "Period": 10,
+                    "Stat": "Average"
+                }
+            },
+            {
+                "Id": "m2",
+                "Label": "mem_used_percent",
+                "MetricStat": {
+                    "Metric": {
+                        "Namespace": "CWAgent",
+                        "MetricName": "mem_used_percent",
+                        "Dimensions": [
+                            {
+                                "Name": "InstanceId",
+                                "Value": instance['InstanceId']
+                            },
+                            {
+                                "Name": "ImageId",
+                                "Value": instance['ImageId']
+                            },
+                            {
+                                "Name": "InstanceType",
+                                "Value": instance['InstanceType']
+                            }
+                        ]
+                    },
+                    "Period": 10,
+                    "Stat": "Average"
+                }
+            },
+        ],
+    )
+
+    my_response = []
+    for metric in response['MetricDataResults']:
+        my_metric = {'Label': metric['Label'], 'Timestamps': [], 'Values': []}
+        for timestamp in metric['Timestamps']:
+            my_metric['Timestamps'].append(timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+        for value in metric['Values']:
+            my_metric['Values'].append(value)
+        my_response.append(my_metric)
+    for metric in my_response:
+        logger.info(metric['Label'])
+        logger.info(metric['Timestamps'])
+        logger.info(metric['Values'])
 
 
 if __name__ == '__main__':
-    prepare()
+    cluster_id = prepare()
+    # get_metrics(cluster_id)
