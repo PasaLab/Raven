@@ -60,14 +60,14 @@ def prepare():
         time.sleep(55)
         clusters = emr.list_clusters()
         for cluster in clusters['Clusters']:
-            if cluster['Id'] == cluster_id:
+            if cluster['Id'] == cid:
                 if cluster['Status']['State'] == 'WAITING':
                     started_flag = True
                 else:
                     logger.info("Cluster starting, please wait...")
                     break
     logger.info("Cluster started!")
-    return cluster_id
+    return cid
 
 
 def get_metrics(cid):
