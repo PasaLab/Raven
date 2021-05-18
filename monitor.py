@@ -56,7 +56,7 @@ def prepare():
             logger.info("MASTERs to create: " + str(masters_to_find - len(masters)) + ", "
                          + "COREs to create: " + str(cores_to_find - len(cores)) + ".")
     logger.info("All instances are created! Starting cluster...")
-    logger.info("It may take several minutes to start a cluster.")
+    logger.info("It may take up to 10 minutes to start a cluster.")
 
     started_flag = False
     while started_flag is False:

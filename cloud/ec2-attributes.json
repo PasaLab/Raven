@@ -1,7 +1,7 @@
 {
-  "KeyName":"olap",
-  "InstanceProfile":"EMR_EC2_DefaultRole",
-  "SubnetId":"subnet-1661c970",
-  "EmrManagedSlaveSecurityGroup":"sg-0489d2178d7217ed0",
-  "EmrManagedMasterSecurityGroup":"sg-01f8a75069f70f275"
+  "KeyName": "olap",
+  "InstanceProfile": "EMR_EC2_DefaultRole",
+  "SubnetId": "subnet-1661c970",
+  "EmrManagedSlaveSecurityGroup": "sg-0489d2178d7217ed0",
+  "EmrManagedMasterSecurityGroup": "sg-01f8a75069f70f275"
 }
