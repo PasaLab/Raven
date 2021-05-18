@@ -138,6 +138,36 @@ def get_metrics_from_cwa(instance):
             },
             {
                 "Id": "m2",
+                "Label": "cpu_usage_user",
+                "MetricStat": {
+                    "Metric": {
+                        "Namespace": "CWAgent",
+                        "MetricName": "cpu_usage_user",
+                        "Dimensions": [
+                            {
+                                "Name": "InstanceId",
+                                "Value": instance['InstanceId']
+                            },
+                            {
+                                "Name": "ImageId",
+                                "Value": instance['ImageId']
+                            },
+                            {
+                                "Name": "InstanceType",
+                                "Value": instance['InstanceType']
+                            },
+                            {
+                                "Name": "cpu",
+                                "Value": "cpu1"
+                            }
+                        ]
+                    },
+                    "Period": 10,
+                    "Stat": "Average"
+                }
+            },
+            {
+                "Id": "m3",
                 "Label": "mem_used_percent",
                 "MetricStat": {
                     "Metric": {
@@ -181,5 +211,6 @@ def get_metrics_from_cwa(instance):
 
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
-    cluster_id = prepare()
-    # get_metrics(cluster_id)
+    # cluster_id = prepare()
+    cluster_id = 'j-21MV7QZC7V7A7'
+    get_metrics(cluster_id)

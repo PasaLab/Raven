@@ -41,8 +41,6 @@
         "measurement": [
           "io_time"
         ],
-          "io_time"
-        ],
         "metrics_collection_interval": 10,
         "resources": [
           "*"
