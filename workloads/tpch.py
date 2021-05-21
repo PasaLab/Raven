@@ -1,7 +1,7 @@
 from workloads.workload import workload
-from lib.popen import subprocess_popen
+from lib.boto3sdk import upload, download
 from lib.Logger import Logger
-
+from lib.popen import subprocess_popen
 
 class tpch(workload):
     def __init__(self):
@@ -11,18 +11,18 @@ class tpch(workload):
         self.logger = Logger('./log/benchmark.log', __name__)
 
     def generate(self):
-        commands = self.conf['generate']['commands']
-        for command in commands:
-            subprocess_popen(command)
+        subprocess_popen("cd " + self.conf['generate']['path'] + " && " + self.conf['generate']['command'])
+        for file in self.conf['generate']['files']:
+            upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "workload/tpch/")
 
     def create(self, engine):
         for sql in self.conf['create']['sql']:
             engine.query(sql)
 
     def load(self, engine):
-        pre_command = self.conf['load']['pre_command']
-        subprocess_popen(pre_command)
         tables = self.conf['load']['tables']
+        for table in tables:
+            download("olapstorage", "workload/tpch/" + table['load'], "./" + table['load'])
         for table in tables:
             sql = "LOAD DATA LOCAL INPATH './" + table['load'] + "' INTO TABLE " + table['as']
             engine.query(sql)

@@ -198,7 +198,7 @@ def get_metrics_from_cwa(instance):
                 "MetricStat": {
                     "Metric": {
                         "Namespace": "CWAgent",
-                        "MetricName": "used_percent",
+                        "MetricName": "disk_used_percent",
                         "Dimensions": [
                             {
                                 "Name": "InstanceId",
@@ -211,6 +211,18 @@ def get_metrics_from_cwa(instance):
                             {
                                 "Name": "InstanceType",
                                 "Value": instance['InstanceType']
+                            },
+                            {
+                                "Name": "device",
+                                "Value": "xvda1"
+                            },
+                            {
+                                "Name": "path",
+                                "Value": "/"
+                            },
+                            {
+                                "Name": "fstype",
+                                "Value": "ext4"
                             }
                         ]
                     },
@@ -224,7 +236,7 @@ def get_metrics_from_cwa(instance):
                 "MetricStat": {
                     "Metric": {
                         "Namespace": "CWAgent",
-                        "MetricName": "io_time",
+                        "MetricName": "diskio_io_time",
                         "Dimensions": [
                             {
                                 "Name": "InstanceId",
@@ -237,6 +249,10 @@ def get_metrics_from_cwa(instance):
                             {
                                 "Name": "InstanceType",
                                 "Value": instance['InstanceType']
+                            },
+                            {
+                                "Name": "name",
+                                "Value": "xvda1"
                             }
                         ]
                     },
@@ -264,5 +280,5 @@ def get_metrics_from_cwa(instance):
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
     # cluster_id = prepare()
-    # cluster_id = 'j-9KGL4XXHAPX3'
-    # get_metrics(cluster_id)
+    cluster_id = 'j-3U7PDPUE1F4CW'
+    get_metrics(cluster_id)

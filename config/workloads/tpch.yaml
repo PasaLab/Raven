@@ -4,17 +4,17 @@ switch:
   load: true
 config:
   generate:
-    commands:
-      - cd /home/hadoop/tpch-kit/dbgen && ./dbgen -s 1 -f
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/nation.tbl s3://olapstorage/tpch/
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/region.tbl s3://olapstorage/tpch/
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/part.tbl s3://olapstorage/tpch/
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/supplier.tbl s3://olapstorage/tpch/
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/partsupp.tbl s3://olapstorage/tpch/
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/customer.tbl s3://olapstorage/tpch/
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/orders.tbl s3://olapstorage/tpch/
-      - aws s3 cp /home/hadoop/tpch-kit/dbgen/lineitem.tbl s3://olapstorage/tpch/
-      - rm -f /home/hadoop/tpch-kit/dbgen/*.tbl
+    path: /home/hadoop/tpch-kit/dbgen
+    command: ./dbgen -s 1 -f
+    file:
+      - nation.tbl
+      - region.tbl
+      - part.tbl
+      - supplier.tbl
+      - partsupp.tbl
+      - customer.tbl
+      - orders.tbl
+      - lineitem.tbl
   create:
     sql:
       - create table nation ( n_nationkey integer , n_name char(25) , n_regionkey integer , n_comment varchar(152)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
@@ -26,7 +26,6 @@ config:
       - create table orders ( o_orderkey bigint , o_custkey integer , o_orderstatus char(1) , o_totalprice DECIMAL(15,2) , o_orderdate date , o_orderpriority char(15) , o_clerk char(15) , o_shippriority integer , o_comment varchar(79) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
       - create table lineitem ( l_orderkey bigint , l_partkey integer , l_suppkey integer , l_linenumber integer , l_quantity DECIMAL(15,2) , l_extendedprice DECIMAL(15,2) , l_discount DECIMAL(15,2) , l_tax DECIMAL(15,2) , l_returnflag char(1) , l_linestatus char(1) , l_shipdate date , l_commitdate date , l_receiptdate date , l_shipinstruct char(25) , l_shipmode char(10) , l_comment varchar(44) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
   load:
-    pre-command: aws s3 cp s3://olapstorage/tpch/ ./ --recursive
     tables:
       - load: nation.tbl
         as: nation

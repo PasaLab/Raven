@@ -1,4 +1,5 @@
 sudo yum -y install git
+sudo python3 -m pip install boto3
 sudo python3 -m pip install pyspark
 sudo python3 -m pip install --upgrade pyyaml
 sudo chmod -R 777 /tmp
@@ -15,8 +16,12 @@ sudo rpm -U ./amazon-cloudwatch-agent.rpm
 cd ~/OLAPBenchmark
 python3 main.py generate
 
+sudo yum -y install git
+git clone https://github.com/PasaLab/OLAPBenchmark
+
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/hadoop/OLAPBenchmark/cloud/cwaconfig.json
 
+cd ~/OLAPBenchmark
 python3 main.py run
 
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a stop
