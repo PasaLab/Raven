@@ -58,7 +58,7 @@ class OnlineStage(Valve):
                     sql = matching_query['sql']
                     start = time.time()
                     if sql == 'sqls':
-                        sqls = matching_query['sql']
+                        sqls = matching_query['sqls']
                         for sql in sqls:
                             context.engine.query(sql)
                     else:
