@@ -280,5 +280,5 @@ def get_metrics_from_cwa(instance):
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
     # cluster_id = prepare()
-    cluster_id = 'j-3U7PDPUE1F4CW'
-    get_metrics(cluster_id)
+    # cluster_id = 'j-1533IUB60T76A'
+    # get_metrics(cluster_id)
