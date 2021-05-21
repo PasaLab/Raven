@@ -13,7 +13,7 @@ class tpch(workload):
     def generate(self):
         subprocess_popen("cd " + self.conf['generate']['path'] + " && " + self.conf['generate']['command'])
         for file in self.conf['generate']['files']:
-            upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "workload/tpch/")
+            upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "tpch/" + file)
 
     def create(self, engine):
         for sql in self.conf['create']['sql']:
@@ -22,7 +22,7 @@ class tpch(workload):
     def load(self, engine):
         tables = self.conf['load']['tables']
         for table in tables:
-            download("olapstorage", "workload/tpch/" + table['load'], "./" + table['load'])
+            download("olapstorage", "tpch/" + table['load'], "./" + table['load'])
         for table in tables:
             sql = "LOAD DATA LOCAL INPATH './" + table['load'] + "' INTO TABLE " + table['as']
             engine.query(sql)

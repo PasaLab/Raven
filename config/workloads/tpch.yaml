@@ -6,7 +6,7 @@ config:
   generate:
     path: /home/hadoop/tpch-kit/dbgen
     command: ./dbgen -s 1 -f
-    file:
+    files:
       - nation.tbl
       - region.tbl
       - part.tbl
