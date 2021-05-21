@@ -39,9 +39,7 @@ class OfflineStage(Valve):
             start = time.time()
             subprocess_popen(command)
             finish = time.time()
-            summary = {}
-            summary['command'] = command
-            summary['time'] = finish - start
+            summary = {'command': command, 'start': start, 'finish': finish}
             self.metrics.set_metrics(summary)
 
 
@@ -59,9 +57,12 @@ class OnlineStage(Valve):
                 if matching_query['name'] == query:
                     sql = matching_query['sql']
                     start = time.time()
-                    context.engine.query(sql)
+                    if sql == 'sqls':
+                        sqls = matching_query['sql']
+                        for sql in sqls:
+                            context.engine.query(sql)
+                    else:
+                        context.engine.query(sql)
                     finish = time.time()
-                    summary = {}
-                    summary['query'] = query
-                    summary['time'] = finish - start
+                    summary = {'query': query, 'start': start, 'finish': finish}
                     self.metrics.set_metrics(summary)
