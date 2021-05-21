@@ -3,5 +3,5 @@ demo.mp4
 /venv/
 /.idea/
 cloud/olap.pem
-/log/
+/log/benchmark.log
 cloud/instances.csv

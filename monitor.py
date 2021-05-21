@@ -79,7 +79,7 @@ def prepare():
     return cid
 
 
-def get_metrics(cid):
+def get_metrics(cid, start, end):
     ec2 = boto3.client('ec2',
                        region_name='ap-southeast-1',
                        aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
@@ -93,18 +93,18 @@ def get_metrics(cid):
                     if tag['Value'] == cid:
                         is_instance = True
             if is_instance:
-                get_metrics_from_cwa(instance)
+                get_metrics_from_cwa(instance, start, end)
 
 
-def get_metrics_from_cwa(instance):
+def get_metrics_from_cwa(instance, start, end):
     cw = boto3.client('cloudwatch',
                       region_name='ap-southeast-1',
                       aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
                       aws_secret_access_key='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')
     t = time.time()
     response = cw.get_metric_data(
-        StartTime=int(t) - 3600,
-        EndTime=int(t) - 0,
+        StartTime=start - 30,
+        EndTime=end + 30,
         MetricDataQueries=[
             {
                 "Id": "m1",
@@ -281,4 +281,4 @@ if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
     # cluster_id = prepare()
     # cluster_id = 'j-1533IUB60T76A'
-    # get_metrics(cluster_id)
+    # get_metrics(cluster_id, 1621601938, 1621602526)
