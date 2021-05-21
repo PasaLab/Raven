@@ -12,15 +12,8 @@ class tpch(workload):
 
     def generate(self):
         commands = self.conf['generate']['commands']
-        command_seq = ""
-        command_first = True
         for command in commands:
-            if command_first:
-                command_seq = command_seq + command
-                command_first = False
-            else:
-                command_seq = command_seq + " && " + command
-        subprocess_popen(command_seq)
+            subprocess_popen(command)
 
     def create(self, engine):
         for sql in self.conf['create']['sql']:
