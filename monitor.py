@@ -192,7 +192,59 @@ def get_metrics_from_cwa(instance):
                     "Stat": "Average"
                 }
             },
-        ],
+            {
+                "Id": "m4",
+                "Label": "disk_used",
+                "MetricStat": {
+                    "Metric": {
+                        "Namespace": "CWAgent",
+                        "MetricName": "used_percent",
+                        "Dimensions": [
+                            {
+                                "Name": "InstanceId",
+                                "Value": instance['InstanceId']
+                            },
+                            {
+                                "Name": "ImageId",
+                                "Value": instance['ImageId']
+                            },
+                            {
+                                "Name": "InstanceType",
+                                "Value": instance['InstanceType']
+                            }
+                        ]
+                    },
+                    "Period": 10,
+                    "Stat": "Average"
+                }
+            },
+            {
+                "Id": "m5",
+                "Label": "io_time",
+                "MetricStat": {
+                    "Metric": {
+                        "Namespace": "CWAgent",
+                        "MetricName": "io_time",
+                        "Dimensions": [
+                            {
+                                "Name": "InstanceId",
+                                "Value": instance['InstanceId']
+                            },
+                            {
+                                "Name": "ImageId",
+                                "Value": instance['ImageId']
+                            },
+                            {
+                                "Name": "InstanceType",
+                                "Value": instance['InstanceType']
+                            }
+                        ]
+                    },
+                    "Period": 10,
+                    "Stat": "Average"
+                }
+            }
+        ]
     )
 
     my_response = []
@@ -212,5 +264,5 @@ def get_metrics_from_cwa(instance):
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
     # cluster_id = prepare()
-    cluster_id = 'j-21MV7QZC7V7A7'
-    get_metrics(cluster_id)
+    # cluster_id = 'j-9KGL4XXHAPX3'
+    # get_metrics(cluster_id)
