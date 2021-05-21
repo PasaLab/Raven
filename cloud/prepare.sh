@@ -13,10 +13,10 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/a
 sudo rpm -U ./amazon-cloudwatch-agent.rpm
 
 cd ~/OLAPBenchmark
-python3 prepare
+python3 main.py prepare
 
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/hadoop/OLAPBenchmark/cloud/cwaconfig.json
 
-python3 run
+python3 main.py run
 
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a stop
