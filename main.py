@@ -1,13 +1,12 @@
+import sys
+import time
 import yaml
 from testplans.testplan import Testplan
 from lib.Logger import Logger
 
 
-def run():
-    # initialize logger
-    logger = Logger('./log/benchmark.log', 'main')
-
-    # 0. Read yaml and check validity
+def generate():
+    # 1. Read yaml and check validity
     global_conf_file = open("config/config.yaml", encoding="UTF-8")
     global_conf = yaml.load(global_conf_file, Loader=yaml.FullLoader)
 
@@ -28,7 +27,27 @@ def run():
         logger.error("Failed: incomplete key-value pairs")
         return
 
-    # 1. Launch the engine
+    # 2. Generate the workload
+    logger.info("Generating workload...")
+    if global_conf['workload'] == 'tpc-h':
+        conf_file = open("config/workloads/tpch.yaml", encoding="UTF-8")
+        conf = yaml.load(conf_file, Loader=yaml.FullLoader)
+        from workloads.tpch import tpch
+        workload = tpch()
+        workload.set_switch(conf['switch'])
+        workload.set_conf(conf['config'])
+        if conf['switch']['generate'] is True:
+            workload.generate()
+            logger.info("Generating data successful!")
+        else:
+            logger.info("Generating data skipped!")
+
+
+def run():
+    start = time.time()
+    global_conf_file = open("config/config.yaml", encoding="UTF-8")
+    global_conf = yaml.load(global_conf_file, Loader=yaml.FullLoader)
+    # 3. Launch the engine
     logger.info("Launching the engine...")
     if global_conf['engine'] == 'spark-sql':
         conf_file = open("config/engines/spark-sql.yaml", encoding="UTF-8")
@@ -47,8 +66,8 @@ def run():
     logger.info("Engine launched successful!")
     logger.info("--------------------------------")
 
-    # 2. Generate the workload
-    logger.info("Generating workload...")
+    # 4. Generate warehouse
+    logger.info("Generating warehouse...")
     if global_conf['workload'] == 'tpc-h':
         conf_file = open("config/workloads/tpch.yaml", encoding="UTF-8")
         conf = yaml.load(conf_file, Loader=yaml.FullLoader)
@@ -56,11 +75,6 @@ def run():
         workload = tpch()
         workload.set_switch(conf['switch'])
         workload.set_conf(conf['config'])
-        if conf['switch']['generate'] is True:
-            workload.generate()
-            logger.info("Generating data successful!")
-        else:
-            logger.info("Generating data skipped!")
         if conf['switch']['create'] is True:
             workload.create(engine)
             logger.info("Creating data tables successful!")
@@ -78,7 +92,7 @@ def run():
     logger.info("Workload generated!")
     logger.info("--------------------------------")
 
-    # 3. Generate the execution plan
+    # 5. Generate the execution plan
     logger.info("Generating execution plan...")
     plan = Testplan()
     if global_conf['test_plan'] == 'one-pass':
@@ -92,13 +106,43 @@ def run():
     logger.info("Generating execution plan successful!")
     logger.info("--------------------------------")
 
-    # 4. Execution and metrics acquisition
+    # 6. Execution and metrics acquisition
     logger.info("Executing queries...")
     plan.start(engine, workload.get_query())
     logger.info("Execution finished!")
-    logger.info("Please acquire metrics on the monitor.")
+
+    offline_metrics, online_metrics = plan.get_metrics()
+    offline_times = []
+    online_times = []
+    for offline_metric in offline_metrics:
+        for query in offline_metric:
+            offline_times.append(query)
+    for online_metric in online_metrics:
+        for query in online_metric:
+            online_times.append(query)
+    logger.info("Offline times...")
+    logger.info(str(offline_times))
+    logger.info("--------------------------------")
+    logger.info("Online times...")
+    logger.info(str(online_times))
+    logger.info("--------------------------------")
+    finish = time.time()
+    logger.info("Job started at: " + str(start))
+    logger.info("Job finished at: " + str(finish))
+    logger.info("Please acquire other metrics on the monitor.")
     logger.info("--------------------------------")
 
 
 if __name__ == '__main__':
-    run()
+    logger = Logger('./log/benchmark.log', 'main')
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "generate":
+            generate()
+        elif sys.argv[1] == "run":
+            run()
+        else:
+            logger.error("Invalid argument: " + sys.argv[1])
+            logger.error("Usage: generate | run")
+    else:
+        logger.error("Invalid number of arguments!")
+        logger.error("Usage: generate | run")
