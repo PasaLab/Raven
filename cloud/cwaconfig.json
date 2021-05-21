@@ -16,10 +16,7 @@
       },
       "cpu": {
         "measurement": [
-          "cpu_usage_idle",
-          "cpu_usage_iowait",
-          "cpu_usage_user",
-          "cpu_usage_system"
+          "cpu_usage_user"
         ],
         "metrics_collection_interval": 10,
         "resources": [
@@ -29,8 +26,7 @@
       },
       "disk": {
         "measurement": [
-          "used_percent",
-          "inodes_free"
+          "used_percent"
         ],
         "metrics_collection_interval": 10,
         "resources": [
