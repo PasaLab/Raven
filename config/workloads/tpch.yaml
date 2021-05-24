@@ -1,5 +1,5 @@
 switch:
-  generate: true
+  generate: false
   create: true
   load: true
 config:
