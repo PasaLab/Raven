@@ -28,7 +28,6 @@ class sparksql(engine):
             start = time.time()
             self.session.sql(self.sql).show()
             end = time.time()
-            self.logger.info("Success: execution complete")
             return end - start
         else:
             self.logger.info("Failed on query: no session available.")

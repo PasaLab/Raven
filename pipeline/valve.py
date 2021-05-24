@@ -1,3 +1,4 @@
+from lib.Logger import Logger
 from lib.popen import subprocess_popen
 from pipeline.metrics import Metrics
 import time
@@ -8,6 +9,7 @@ class Valve:
         self.next = None
         self.is_first_valve = False
         self.metrics = Metrics()
+        self.logger = Logger('./log/benchmark.log', 'valve')
 
     def set_next(self, next):
         self.next = next
@@ -66,3 +68,4 @@ class OnlineStage(Valve):
                     finish = time.time()
                     summary = {'query': query, 'start': start, 'finish': finish}
                     self.metrics.set_metrics(summary)
+                    self.logger.info("Execution of " + query + " complete.")
