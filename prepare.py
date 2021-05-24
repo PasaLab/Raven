@@ -76,6 +76,8 @@ def prepare():
                     logger.info("Cluster starting, please wait...")
                     break
     logger.info("Cluster started!")
+    logger.info("Please connect to servers in Shell consoles. IPs to be connected is in ./cloud/instances.csv.")
+    logger.info("Remember to edit the configuration of your engine regarding internal network (if needed).")
     return
 
 

@@ -138,7 +138,7 @@ def analyze(metrics, timestamps, start, finish):
 
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
-    cluster_id = 'j-OVZ73NAH548A'
+    cluster_id = 'j-S4BE07F6HTXU'
     start = 1621838460
     finish = 1621839025
     m = get_metrics(cluster_id, start, finish)
