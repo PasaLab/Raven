@@ -102,9 +102,9 @@ def analyze(metrics, timestamps, start, finish):
             for metric in instance:
                 if metric['Label'] == "cpu_usage_user":
                     for i in range(len(metric['Timestamps'])):
-                        time = metric['Timestamps'][i]
+                        time = metric['Timestamps'][i].timestamp()
                         if start <= time <= finish:
-                            cpu_avg_online = metric['Values'][i]
+                            cpu_avg_online += metric['Values'][i]
                             cpu_avg_online_cnt += 1
         cpu_avg_online = cpu_avg_online / cpu_avg_online_cnt * 0.01
     if 'mem_avg_online' in conf['metrics']:
@@ -114,9 +114,9 @@ def analyze(metrics, timestamps, start, finish):
             for metric in instance:
                 if metric['Label'] == "mem_used_percent":
                     for i in range(len(metric['Timestamps'])):
-                        time = metric['Timestamps'][i]
+                        time = metric['Timestamps'][i].timestamp()
                         if start <= time <= finish:
-                            mem_avg_online = metric['Values'][i]
+                            mem_avg_online += metric['Values'][i]
                             mem_avg_online_cnt += 1
         mem_avg_online = mem_avg_online / mem_avg_online_cnt * 0.01
 
@@ -139,13 +139,13 @@ def analyze(metrics, timestamps, start, finish):
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
     cluster_id = 'j-S4BE07F6HTXU'
-    start = 1621838460
-    finish = 1621839025
+    start = 1621869071
+    finish = 1621869672
     m = get_metrics(cluster_id, start, finish)
     #with open("./metrics", 'a', encoding='utf-8') as f:
     #    print(m, file=f)
-    download("olapstorage", "tmp/offline_times", "./offline_times")
-    download("olapstorage", "tmp/online_times", "./online_times")
+    #download("olapstorage", "tmp/offline_times", "./offline_times")
+    #download("olapstorage", "tmp/online_times", "./online_times")
     #with open("./metrics", 'r', encoding='utf-8') as f:
     #    m = json.loads(f.read().replace("'","\""))
     t = {}

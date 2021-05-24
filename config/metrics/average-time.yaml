@@ -5,11 +5,11 @@ offline:
   calculation:
     eval: time_avg_offline
   delay:
-    eval: time_avg_offline
+    eval: 0.01 * time_avg_offline
 online:
   calculation:
     eval: time_avg_online
   delay:
-    eval: time_avg_online
+    eval: 0.01 * time_avg_online
 total:
   eval: offline_calculation_overhead + offline_delay_overhead + online_calculation_overhead + online_delay_overhead
