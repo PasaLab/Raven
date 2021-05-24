@@ -21,9 +21,6 @@ def generate():
         if global_conf['test_plan'] not in ['one-pass', 'custom']:
             logger.error("Failed: invalid test plan type")
             return
-        if global_conf['metrics'] not in ['time-based', 'custom']:
-            logger.error("Failed: invalid metrics type")
-            return
     except KeyError:
         logger.error("Failed: incomplete key-value pairs")
         return
