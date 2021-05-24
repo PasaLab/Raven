@@ -142,16 +142,16 @@ if __name__ == '__main__':
     start = 1621869071
     finish = 1621869672
     m = get_metrics(cluster_id, start, finish)
-    #with open("./metrics", 'a', encoding='utf-8') as f:
-    #    print(m, file=f)
-    #download("olapstorage", "tmp/offline_times", "./offline_times")
-    #download("olapstorage", "tmp/online_times", "./online_times")
-    #with open("./metrics", 'r', encoding='utf-8') as f:
+    with open("./metrics/metrics", 'w', encoding='utf-8') as f:
+        print(m, file=f)
+    #download("olapstorage", "tmp/offline_times", "./metrics/offline_times")
+    #download("olapstorage", "tmp/online_times", "./metrics/online_times")
+    #with open("./metrics/metrics", 'r', encoding='utf-8') as f:
     #    m = json.loads(f.read().replace("'","\""))
     t = {}
-    with open("./offline_times", 'r', encoding='utf-8') as f:
+    with open("./metrics/offline_times", 'r', encoding='utf-8') as f:
         t['offline'] = json.loads(f.read().replace("'","\""))
-    with open("./online_times", 'r', encoding='utf-8') as f:
+    with open("./metrics/online_times", 'r', encoding='utf-8') as f:
         t['online'] = json.loads(f.read().replace("'","\""))
     score = analyze(m, t, start, finish)
     logger.info("--------------------------------")

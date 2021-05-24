@@ -7,11 +7,11 @@ offline:
   calculation:
     eval: time_tot_offline
   delay:
-    eval: 0.01 * time_tot_offline
+    eval: 0.1 * time_tot_offline
 online:
   calculation:
     eval: 0.5 * time_tot_online * (cpu_avg_online + mem_avg_online)
   delay:
-    eval: 0.01 * time_tot_online
+    eval: 0.1 * time_tot_online
 total:
   eval: offline_calculation_overhead + offline_delay_overhead + online_calculation_overhead + online_delay_overhead
