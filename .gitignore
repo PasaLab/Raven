@@ -3,6 +3,6 @@ demo.mp4
 /venv/
 /.idea/
 cloud/olap.pem
-/log/benchmark.log
 cloud/instances.csv
-/metrics
+/metrics/
+/log/
