@@ -6,3 +6,6 @@ cloud/olap.pem
 cloud/instances.csv
 /metrics/
 /log/
+metrics/offline_times
+metrics/online_times
+log/benchmark.log
