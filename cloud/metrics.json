@@ -8,18 +8,6 @@
         "MetricName": "cpu_usage_user",
         "Dimensions": [
           {
-            "Name": "InstanceId",
-            "Value": ""
-          },
-          {
-            "Name": "ImageId",
-            "Value": ""
-          },
-          {
-            "Name": "InstanceType",
-            "Value": ""
-          },
-          {
             "Name": "cpu",
             "Value": "cpu0"
           }
@@ -38,18 +26,6 @@
         "MetricName": "cpu_usage_user",
         "Dimensions": [
           {
-            "Name": "InstanceId",
-            "Value": ""
-          },
-          {
-            "Name": "ImageId",
-            "Value": ""
-          },
-          {
-            "Name": "InstanceType",
-            "Value": ""
-          },
-          {
             "Name": "cpu",
             "Value": "cpu1"
           }
@@ -66,20 +42,7 @@
       "Metric": {
         "Namespace": "CWAgent",
         "MetricName": "mem_used_percent",
-        "Dimensions": [
-          {
-            "Name": "InstanceId",
-            "Value": ""
-          },
-          {
-            "Name": "ImageId",
-            "Value": ""
-          },
-          {
-            "Name": "InstanceType",
-            "Value": ""
-          }
-        ]
+        "Dimensions": []
       },
       "Period": 10,
       "Stat": "Average"
@@ -93,18 +56,6 @@
         "Namespace": "CWAgent",
         "MetricName": "disk_used_percent",
         "Dimensions": [
-          {
-            "Name": "InstanceId",
-            "Value": ""
-          },
-          {
-            "Name": "ImageId",
-            "Value": ""
-          },
-          {
-            "Name": "InstanceType",
-            "Value": ""
-          },
           {
             "Name": "device",
             "Value": "xvda1"
@@ -131,18 +82,6 @@
         "Namespace": "CWAgent",
         "MetricName": "diskio_io_time",
         "Dimensions": [
-          {
-            "Name": "InstanceId",
-            "Value": ""
-          },
-          {
-            "Name": "ImageId",
-            "Value": ""
-          },
-          {
-            "Name": "InstanceType",
-            "Value": ""
-          },
           {
             "Name": "name",
             "Value": "xvda1"
