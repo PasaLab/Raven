@@ -9,7 +9,6 @@ class Valve:
         self.next = None
         self.is_first_valve = False
         self.metrics = Metrics()
-        self.logger = Logger('./log/benchmark.log', 'valve')
 
     def set_next(self, next):
         self.next = next
@@ -52,6 +51,7 @@ class OnlineStage(Valve):
         self.description = config['description']
         self.queries = config['queries']
         self.isOnline = True
+        self.logger = Logger('./log/benchmark.log', 'onlinestage')
 
     def run(self, context):
         for query in self.queries:
