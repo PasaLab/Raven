@@ -5,3 +5,4 @@ demo.mp4
 cloud/olap.pem
 /log/benchmark.log
 cloud/instances.csv
+/metrics
