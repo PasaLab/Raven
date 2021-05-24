@@ -1,0 +1,17 @@
+metrics:
+  - time_tot_offline
+  - time_tot_online
+  - cpu_avg_online
+  - mem_avg_online
+offline:
+  calculation:
+    eval: time_tot_offline
+  delay:
+    eval: time_tot_offline
+online:
+  calculation:
+    eval: time_tot_online * (cpu_avg_online + mem_avg_online) * 0.5
+  delay:
+    eval: time_tot_online
+total:
+  eval: offline_calculation_overhead + offline_delay_overhead + online_calculation_overhead + online_delay_overhead
