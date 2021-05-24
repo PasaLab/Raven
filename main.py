@@ -2,6 +2,7 @@ import sys
 import time
 import yaml
 from testplans.testplan import Testplan
+from lib.boto3sdk import upload
 from lib.Logger import Logger
 
 
@@ -126,6 +127,13 @@ def run():
     logger.info("Online times...")
     logger.info(str(online_times))
     logger.info("--------------------------------")
+    with open("./offline_times", 'w', encoding='utf-8') as f:
+        print(str(offline_times), file=f)
+    with open("./online_times", 'w', encoding='utf-8') as f:
+        print(str(online_times), file=f)
+    upload("./offline_times", "olapstorage", "tmp")
+    upload("./online_times", "olapstorage", "tmp")
+
     finish = time.time()
     logger.info("Job started at: " + str(start))
     logger.info("Job finished at: " + str(finish))

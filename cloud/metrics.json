@@ -1,0 +1,156 @@
+[
+  {
+    "Id": "m1",
+    "Label": "cpu_usage_user",
+    "MetricStat": {
+      "Metric": {
+        "Namespace": "CWAgent",
+        "MetricName": "cpu_usage_user",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": ""
+          },
+          {
+            "Name": "ImageId",
+            "Value": ""
+          },
+          {
+            "Name": "InstanceType",
+            "Value": ""
+          },
+          {
+            "Name": "cpu",
+            "Value": "cpu0"
+          }
+        ]
+      },
+      "Period": 10,
+      "Stat": "Average"
+    }
+  },
+  {
+    "Id": "m2",
+    "Label": "cpu_usage_user",
+    "MetricStat": {
+      "Metric": {
+        "Namespace": "CWAgent",
+        "MetricName": "cpu_usage_user",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": ""
+          },
+          {
+            "Name": "ImageId",
+            "Value": ""
+          },
+          {
+            "Name": "InstanceType",
+            "Value": ""
+          },
+          {
+            "Name": "cpu",
+            "Value": "cpu1"
+          }
+        ]
+      },
+      "Period": 10,
+      "Stat": "Average"
+    }
+  },
+  {
+    "Id": "m3",
+    "Label": "mem_used_percent",
+    "MetricStat": {
+      "Metric": {
+        "Namespace": "CWAgent",
+        "MetricName": "mem_used_percent",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": ""
+          },
+          {
+            "Name": "ImageId",
+            "Value": ""
+          },
+          {
+            "Name": "InstanceType",
+            "Value": ""
+          }
+        ]
+      },
+      "Period": 10,
+      "Stat": "Average"
+    }
+  },
+  {
+    "Id": "m4",
+    "Label": "disk_used",
+    "MetricStat": {
+      "Metric": {
+        "Namespace": "CWAgent",
+        "MetricName": "disk_used_percent",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": ""
+          },
+          {
+            "Name": "ImageId",
+            "Value": ""
+          },
+          {
+            "Name": "InstanceType",
+            "Value": ""
+          },
+          {
+            "Name": "device",
+            "Value": "xvda1"
+          },
+          {
+            "Name": "path",
+            "Value": "/"
+          },
+          {
+            "Name": "fstype",
+            "Value": "ext4"
+          }
+        ]
+      },
+      "Period": 10,
+      "Stat": "Average"
+    }
+  },
+  {
+    "Id": "m5",
+    "Label": "io_time",
+    "MetricStat": {
+      "Metric": {
+        "Namespace": "CWAgent",
+        "MetricName": "diskio_io_time",
+        "Dimensions": [
+          {
+            "Name": "InstanceId",
+            "Value": ""
+          },
+          {
+            "Name": "ImageId",
+            "Value": ""
+          },
+          {
+            "Name": "InstanceType",
+            "Value": ""
+          },
+          {
+            "Name": "name",
+            "Value": "xvda1"
+          }
+        ]
+      },
+      "Period": 10,
+      "Stat": "Average"
+    }
+  }
+]
