@@ -67,8 +67,8 @@ def analyze(metrics, timestamps):
 
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
-    cluster_id = 'j-1533IUB60T76A'
-    m = get_metrics(cluster_id, 1621601938, 1621602526)
+    cluster_id = 'j-OVZ73NAH548A'
+    m = get_metrics(cluster_id, 1621837574, 1621838170)
     t = {}
     download("olapstorage", "tmp/offline_times", "./offline_times")
     download("olapstorage", "tmp/online_times", "./online_times")

@@ -131,8 +131,8 @@ def run():
         print(str(offline_times), file=f)
     with open("./online_times", 'w', encoding='utf-8') as f:
         print(str(online_times), file=f)
-    upload("./offline_times", "olapstorage", "tmp")
-    upload("./online_times", "olapstorage", "tmp")
+    upload("./offline_times", "olapstorage", "tmp/offline_times")
+    upload("./online_times", "olapstorage", "tmp/online_times")
 
     finish = time.time()
     logger.info("Job started at: " + str(start))
