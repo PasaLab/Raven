@@ -52,8 +52,20 @@ class OnlineStage(Valve):
         self.queries = config['queries']
         self.isOnline = True
         self.logger = Logger('./log/benchmark.log', 'onlinestage')
+        self.concurrent = False
+        if config['concurrency'] > 1:
+            self.concurrent = True
 
     def run(self, context):
+        if self.concurrent:
+            self.run_with_concurrency(context)
+        else:
+            self.run_without_concurrency(context)
+
+    def run_with_concurrency(self, context):
+        pass
+
+    def run_without_concurrency(self, context):
         for query in self.queries:
             for matching_query in context.queries['sql']:
                 if matching_query['name'] == query:
