@@ -28,13 +28,13 @@ class Valve:
         if self.concurrent:
             threads = []
             for i in range(self.concurrent):
-                threads.append(Thread(target=self.run_thread, args=(context,)))
+                threads.append(Thread(target=self.run_thread, args=(context, i)))
             for thread in threads:
                 thread.start()
         else:
-            self.run_thread(context)
+            self.run_thread(context, 0)
 
-    def run_thread(self, context):
+    def run_thread(self, context, thread_id):
         pass
 
     def get_metrics(self):
@@ -50,7 +50,7 @@ class OfflineStage(Valve):
         if config['concurrency'] > 1:
             self.concurrent = True
 
-    def run_thread(self, context):
+    def run_thread(self, context, thread_id):
         for item in self.commands:
             try:
                 command = 'cd ' + item['path'] + ' && ' + item['command']
@@ -59,7 +59,7 @@ class OfflineStage(Valve):
             start = time.time()
             subprocess_popen(command)
             finish = time.time()
-            summary = {'command': command, 'start': start, 'finish': finish}
+            summary = {'threadID': str(thread_id), 'command': command, 'start': start, 'finish': finish}
             self.metrics.set_metrics(summary)
 
 
@@ -73,7 +73,7 @@ class OnlineStage(Valve):
         if config['concurrency'] > 1:
             self.concurrent = True
 
-    def run_thread(self, context):
+    def run_thread(self, context, thread_id):
         for query in self.queries:
             for matching_query in context.queries['sql']:
                 if matching_query['name'] == query:
@@ -86,6 +86,6 @@ class OnlineStage(Valve):
                     else:
                         context.engine.query(sql)
                     finish = time.time()
-                    summary = {'query': query, 'start': start, 'finish': finish}
+                    summary = {'threadID': str(thread_id), 'query': query, 'start': start, 'finish': finish}
                     self.metrics.set_metrics(summary)
                     self.logger.info("Execution of " + query + " complete.")
