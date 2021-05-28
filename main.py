@@ -99,6 +99,18 @@ def run():
         from testplans.onepass import One_pass_testplan
         plan = One_pass_testplan()
         plan.build(conf)
+    if global_conf['test_plan'] == 'one-pass-concurrent':
+        conf_file = open("config/testplans/one-pass-concurrent.yaml", encoding="UTF-8")
+        conf = yaml.load(conf_file, Loader=yaml.FullLoader)
+        from testplans.onepassConcurrent import One_pass_concurrent_testplan
+        plan = One_pass_concurrent_testplan()
+        plan.build(conf)
+    if global_conf['test_plan'] == 'one-offline-multi-online':
+        conf_file = open("config/testplans/one-offline-multi-online.yaml", encoding="UTF-8")
+        conf = yaml.load(conf_file, Loader=yaml.FullLoader)
+        from testplans.oneOfflineMultiOnline import One_offline_multi_online_testplan
+        plan = One_offline_multi_online_testplan()
+        plan.build(conf)
     else:
         pass
     logger.info("Generating execution plan successful!")
