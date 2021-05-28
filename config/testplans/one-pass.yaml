@@ -1,6 +1,7 @@
 offline:
   name: offline
   description: offline stage
+  concurrency: 1
   commands:
     - path: /home/hadoop/tpch-kit/dbgen
       command: ls
