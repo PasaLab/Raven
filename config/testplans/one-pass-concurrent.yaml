@@ -1,0 +1,13 @@
+offline:
+  name: offline
+  description: offline stage
+  commands:
+    - path: /home/hadoop/tpch-kit/dbgen
+      command: ls
+online:
+  name: online
+  description: online stage
+  concurrency: 3
+  queries:
+    - Q1
+    - Q2

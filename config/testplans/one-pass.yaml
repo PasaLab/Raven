@@ -7,6 +7,7 @@ offline:
 online:
   name: online
   description: online stage
+  concurrency: 1
   queries:
     - Q1
     - Q2
@@ -22,9 +23,7 @@ online:
     - Q12
     - Q13
     - Q14
-    - Q15b
     - Q15
-    - Q15a
     - Q16
     - Q17
     - Q18
