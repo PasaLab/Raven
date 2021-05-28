@@ -26,7 +26,7 @@ class tpch(workload):
         for table in tables:
             sql = "LOAD DATA LOCAL INPATH './" + table['load'] + "' INTO TABLE " + table['as']
             engine.query(sql)
-            self.logger.info("Successfully uploaded " + table['load'] + "as" + table['as'] + ".")
+            self.logger.info("Successfully uploaded " + table['load'] + " as " + table['as'] + ".")
 
     def delete(self):
         pass

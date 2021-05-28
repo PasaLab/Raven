@@ -21,6 +21,7 @@ sudo rpm -U ./amazon-cloudwatch-agent.rpm
 
 # on master
 cd ~/OLAPBenchmark
+mkdir log
 python3 main.py generate
 
 # on all machines
