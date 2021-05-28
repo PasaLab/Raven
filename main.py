@@ -18,7 +18,7 @@ def generate():
         if global_conf['workload'] not in ['tpc-h', 'custom']:
             logger.error("Failed: invalid workload type")
             return
-        if global_conf['test_plan'] not in ['one-pass', 'custom']:
+        if global_conf['test_plan'] not in ['one-pass', 'one-pass-concurrent', 'one-offline-multi-online', 'custom']:
             logger.error("Failed: invalid test plan type")
             return
     except KeyError:
