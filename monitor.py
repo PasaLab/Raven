@@ -138,14 +138,14 @@ def analyze(metrics, timestamps, start, finish):
 
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
-    cluster_id = 'j-S4BE07F6HTXU'
-    start = 1621869071
-    finish = 1621869672
+    cluster_id = 'j-35XACW9XW49LR'
+    start = 1621922639
+    finish = 1621923247
     m = get_metrics(cluster_id, start, finish)
     with open("./metrics/metrics", 'w', encoding='utf-8') as f:
         print(m, file=f)
-    #download("olapstorage", "tmp/offline_times", "./metrics/offline_times")
-    #download("olapstorage", "tmp/online_times", "./metrics/online_times")
+    download("olapstorage", "tmp/offline_times", "./metrics/offline_times")
+    download("olapstorage", "tmp/online_times", "./metrics/online_times")
     #with open("./metrics/metrics", 'r', encoding='utf-8') as f:
     #    m = json.loads(f.read().replace("'","\""))
     t = {}
