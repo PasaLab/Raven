@@ -1,6 +1,5 @@
 from lib.Logger import Logger
 from lib.popen import subprocess_popen
-from pipeline.metrics import Metrics
 from threading import Thread
 import time
 
@@ -9,7 +8,7 @@ class Valve:
     def __init__(self):
         self.next = None
         self.is_first_valve = False
-        self.metrics = Metrics()
+        self.metrics = []
 
         self.name = "New stage"
         self.description = ""
@@ -46,7 +45,7 @@ class Valve:
         pass
 
     def get_metrics(self):
-        return self.metrics.get_metrics()
+        return self.metrics
 
 
 class OfflineStage(Valve):
@@ -69,7 +68,7 @@ class OfflineStage(Valve):
             subprocess_popen(command)
             finish = time.time()
             summary = {'threadID': str(thread_id), 'command': command, 'start': start, 'finish': finish}
-            self.metrics.set_metrics(summary)
+            self.metrics.append(summary)
 
 
 class OnlineStage(Valve):
@@ -97,5 +96,5 @@ class OnlineStage(Valve):
                         context.engine.query(sql)
                     finish = time.time()
                     summary = {'threadID': str(thread_id), 'query': query, 'start': start, 'finish': finish}
-                    self.metrics.set_metrics(summary)
+                    self.metrics.append(summary)
                     self.logger.info("Execution of " + query + " complete.")
