@@ -1,7 +1,7 @@
 switch:
   generate: false
-  create: true
-  load: true
+  create: false
+  load: false
 config:
   generate:
     path: /home/hadoop/tpch-kit/dbgen

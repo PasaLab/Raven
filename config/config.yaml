@@ -1,4 +1,4 @@
 engine: spark-sql
 workload: tpc-h
-test_plan: one-pass
+test_plan: one-pass-concurrent
 metrics: time-multiplies-resource
