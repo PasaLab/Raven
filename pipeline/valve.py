@@ -1,6 +1,7 @@
 from lib.Logger import Logger
 from lib.popen import subprocess_popen
 from pipeline.metrics import Metrics
+from threading import Thread
 import time
 
 
@@ -10,6 +11,13 @@ class Valve:
         self.is_first_valve = False
         self.metrics = Metrics()
 
+        self.name = "New stage"
+        self.description = ""
+        self.isOnline = False
+
+        self.concurrent = False
+        self.logger = Logger('./log/benchmark.log', 'stage')
+
     def set_next(self, next):
         self.next = next
 
@@ -17,6 +25,16 @@ class Valve:
         self.is_first_valve = True
 
     def run(self, context):
+        if self.concurrent:
+            threads = []
+            for i in range(self.concurrent):
+                threads.append(Thread(target=self.run_thread, args=(context,)))
+            for thread in threads:
+                thread.start()
+        else:
+            self.run_thread(context)
+
+    def run_thread(self, context):
         pass
 
     def get_metrics(self):
@@ -29,9 +47,10 @@ class OfflineStage(Valve):
         self.name = config['name']
         self.description = config['description']
         self.commands = config['commands']
-        self.isOnline = False
+        if config['concurrency'] > 1:
+            self.concurrent = True
 
-    def run(self, context):
+    def run_thread(self, context):
         for item in self.commands:
             try:
                 command = 'cd ' + item['path'] + ' && ' + item['command']
@@ -51,21 +70,10 @@ class OnlineStage(Valve):
         self.description = config['description']
         self.queries = config['queries']
         self.isOnline = True
-        self.logger = Logger('./log/benchmark.log', 'onlinestage')
-        self.concurrent = False
         if config['concurrency'] > 1:
             self.concurrent = True
 
-    def run(self, context):
-        if self.concurrent:
-            self.run_with_concurrency(context)
-        else:
-            self.run_without_concurrency(context)
-
-    def run_with_concurrency(self, context):
-        pass
-
-    def run_without_concurrency(self, context):
+    def run_thread(self, context):
         for query in self.queries:
             for matching_query in context.queries['sql']:
                 if matching_query['name'] == query:
