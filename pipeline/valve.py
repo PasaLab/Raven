@@ -14,7 +14,7 @@ class Valve:
         self.description = ""
         self.isOnline = False
 
-        self.concurrent = False
+        self.concurrency = 1
         self.logger = Logger('./log/benchmark.log', 'stage')
 
     def set_next(self, next):
@@ -24,9 +24,9 @@ class Valve:
         self.is_first_valve = True
 
     def run(self, context):
-        if self.concurrent:
+        if self.concurrency > 1:
             threads = []
-            for i in range(self.concurrent):
+            for i in range(self.concurrency):
                 threads.append(Thread(target=self.run_thread, args=(context, i)))
             self.logger.info("Concurrency detected. Starting threads...")
             for thread in threads:
@@ -40,6 +40,8 @@ class Valve:
             self.logger.info("Waiting for all threads to finish...")
             self.run_thread(context, 0)
             self.logger.info("All threads finished!")
+        self.logger.info("Stage finished!")
+        self.logger.info("--------------------------------")
 
     def run_thread(self, context, thread_id):
         pass
@@ -55,8 +57,7 @@ class OfflineStage(Valve):
         self.name = config['name']
         self.description = config['description']
         self.commands = config['commands']
-        if config['concurrency'] > 1:
-            self.concurrent = True
+        self.concurrency = config['concurrency']
 
     def run_thread(self, context, thread_id):
         for item in self.commands:
@@ -79,8 +80,7 @@ class OnlineStage(Valve):
         self.description = config['description']
         self.queries = config['queries']
         self.isOnline = True
-        if config['concurrency'] > 1:
-            self.concurrent = True
+        self.concurrency = config['concurrency']
 
     def run_thread(self, context, thread_id):
         for query in self.queries:
