@@ -33,3 +33,19 @@ python3 main.py run
 
 # on all machines
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a stop
+
+# kylin engine
+wget https://downloads.apache.org/kylin/apache-kylin-3.1.2/apache-kylin-3.1.2-bin-hbase1x.tar.gz
+tar -zxvf apache-kylin-3.1.2-bin-hbase1x.tar.gz
+mv apache-kylin-3.1.2-bin-hbase1x kylin
+export KYLIN_HOME=/home/hadoop/kylin
+export HIVE_HOME=/usr/lib/hive
+export PATH=$PATH:$KYLIN_HOME/bin:$HIVE_HOME/bin
+cd kylin
+mkdir ext
+cp /usr/lib/hive/lib/hive-metastore-2.3.6-amzn-1.jar ext
+./bin/check-env.sh
+
+./bin/kylin.sh start
+
+./bin/kylin.sh stop
