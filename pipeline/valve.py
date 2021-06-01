@@ -53,7 +53,7 @@ class Valve:
 class OfflineStage(Valve):
     def __init__(self, config):
         super().__init__()
-        self.logger = Logger('./log/benchmark.log', 'offlinestage')
+        self.logger = Logger('./log/benchmark.log', 'offline_stage')
         self.name = config['name']
         self.description = config['description']
         self.commands = config['commands']
@@ -75,7 +75,7 @@ class OfflineStage(Valve):
 class OnlineStage(Valve):
     def __init__(self, config):
         super().__init__()
-        self.logger = Logger('./log/benchmark.log', 'onlinestage')
+        self.logger = Logger('./log/benchmark.log', 'online_stage')
         self.name = config['name']
         self.description = config['description']
         self.queries = config['queries']
