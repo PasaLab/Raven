@@ -12,7 +12,7 @@ def generate():
     global_conf = yaml.load(global_conf_file, Loader=yaml.FullLoader)
 
     try:
-        if global_conf['engine'] not in ['spark-sql', 'custom']:
+        if global_conf['engine'] not in ['spark-sql', 'kylin', 'custom']:
             logger.error("Failed: invalid engine type")
             return
         if global_conf['workload'] not in ['tpc-h', 'custom']:
@@ -53,14 +53,19 @@ def run():
         from engines.sparksql import sparksql
         engine = sparksql()
         engine.set_app_name(conf['name'])
-        try:
-            engine.set_conf(conf['config'])
-        except KeyError:
-            engine.set_conf({})
-        engine.launch()
+    if global_conf['engine'] == 'kylin':
+        conf_file = open("config/engines/kylin.yaml", encoding="UTF-8")
+        conf = yaml.load(conf_file, Loader=yaml.FullLoader)
+        from engines.kylin import kylin
+        engine = kylin()
     else:
         from engines.engine import engine
         engine = engine()
+    try:
+        engine.set_conf(conf['config'])
+    except KeyError:
+        engine.set_conf({})
+    engine.launch()
     logger.info("Engine launched successful!")
     logger.info("--------------------------------")
 
