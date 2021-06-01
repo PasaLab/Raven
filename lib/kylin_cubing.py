@@ -2,9 +2,9 @@ import time
 import json
 import requests
 import sys
-from lib.Logger import Logger
+from Logger import Logger
 
-logger = Logger('./log/benchmark.log', 'kylin_cubing')
+logger = Logger('../log/benchmark.log', 'kylin_cubing')
 cube_name = ""
 if len(sys.argv) == 2:
     cube_name = sys.argv[1]
