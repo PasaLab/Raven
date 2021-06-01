@@ -4,7 +4,7 @@ offline:
   concurrency: 1
   commands:
     - path: ./lib/
-      command: python3 kylin_cubing.py
+      command: python3 kylin_cubing.py TPCH_Q1
 online:
   - name: online 1
     description: online stage 1
