@@ -3,8 +3,8 @@ offline:
   description: offline stage
   concurrency: 1
   commands:
-    - path: /home/hadoop/tpch-kit/dbgen
-      command: ls
+    - path: ./lib/
+      command: python3 kylin_cubing.py
 online:
   name: online
   description: online stage

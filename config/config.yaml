@@ -1,4 +1,4 @@
-engine: spark-sql
+engine: kylin
 workload: tpc-h
 test_plan: one-pass
 metrics: time-multiplies-resource
