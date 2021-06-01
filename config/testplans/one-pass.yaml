@@ -10,4 +10,4 @@ online:
   description: online stage
   concurrency: 1
   queries:
-    - Q1
+    - KQ1
