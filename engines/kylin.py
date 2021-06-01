@@ -1,6 +1,7 @@
 from engines.engine import engine
-import sqlalchemy as sa
+import json
 import time
+import requests
 
 
 class kylin(engine):
@@ -10,18 +11,38 @@ class kylin(engine):
 
     def launch(self):
         self.logger.info("Launching kylin...")
-        self.kylin = sa.create_engine('kylin://ADMIN:KYLIN@localhost:7070/tpch?version=v1')
+        self.logger.info('Kylin has been launched manually by the user.')
         self.logger.info("Launch kylin complete.")
 
     def query(self, sql):
         self.sql = sql
+        url = "http://localhost:7070/kylin/api/query"
+        payload = {
+            'sql': self.sql,
+            'offset': 0,
+            'limit': 20,
+            'acceptPartial': True,
+            'project': 'tpch',
+            'backdoorToggles': None
+        }
+        payload = json.dumps(payload)
+        headers = {
+            'Authorization': "Basic QURNSU46S1lMSU4=",
+            'content-type': "application/json;charset=UTF-8",
+        }
         start = time.time()
-        results = self.kylin.execute(sql)
+        response = requests.request("POST", url, data=payload, headers=headers)
         end = time.time()
-        if len(results) > 10:
-            results = results[:10]
-        for line in results:
-            print(line)
+        message = json.loads(response.text)
+        for result in message['results']:
+            first_cell = True
+            for cell in result:
+                if first_cell:
+                    print(cell, end="")
+                    first_cell = False
+                else:
+                    print("\t" + cell, end="")
+            print("")
         return end - start
 
     def stop(self):
