@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from lib.Logger import Logger
 
 
 class engine(object):
@@ -6,6 +7,9 @@ class engine(object):
 
     def __init__(self):
         self.conf = None
+        self.sql = None
+        self.metrics = {}
+        self.logger = Logger('./log/benchmark.log', 'engine')
 
     @abstractmethod
     def launch(self):

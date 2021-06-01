@@ -1,7 +1,6 @@
 from engines.engine import engine
 from pyspark.sql import SparkSession
 from pyspark.conf import SparkConf
-from lib.Logger import Logger
 import time
 
 
@@ -10,9 +9,6 @@ class sparksql(engine):
         super().__init__()
         self.conf = SparkConf()
         self.session = None
-        self.sql = None
-        self.metrics = {}
-        self.logger = Logger('./log/benchmark.log', 'engine')
 
     def launch(self):
         self.logger.info("Launching spark-sql...")
