@@ -2,6 +2,7 @@
 sudo yum -y install git
 sudo python3 -m pip install boto3
 sudo python3 -m pip install pyspark
+sudo python3 -m pip install requests
 sudo python3 -m pip install --upgrade pyyaml
 sudo chmod -R 777 /tmp
 git clone https://github.com/gregrahn/tpch-kit
@@ -40,12 +41,13 @@ tar -zxvf apache-kylin-3.1.2-bin-hbase1x.tar.gz
 mv apache-kylin-3.1.2-bin-hbase1x kylin
 export KYLIN_HOME=/home/hadoop/kylin
 export HIVE_HOME=/usr/lib/hive
+export HIVE_CONF_DIR=/usr/lib/hive/conf
 export PATH=$PATH:$KYLIN_HOME/bin:$HIVE_HOME/bin
 cd kylin
 mkdir ext
 cp /usr/lib/hive/lib/hive-metastore-2.3.6-amzn-1.jar ext
 ./bin/check-env.sh
 
-./bin/kylin.sh start
+/home/hadoop/kylin/bin/kylin.sh start
 
-./bin/kylin.sh stop
+/home/hadoop/kylin/bin/kylin.sh stop
