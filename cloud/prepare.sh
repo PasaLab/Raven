@@ -9,16 +9,17 @@ git clone https://github.com/gregrahn/tpch-kit
 cd ~/tpch-kit/dbgen
 make
 cd ~
+sudo yum -y install collectd
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+sudo rpm -U ./amazon-cloudwatch-agent.rpm
 git clone https://github.com/PasaLab/OLAPBenchmark
 
 # on slaves
 sudo yum -y install git
-git clone https://github.com/PasaLab/OLAPBenchmark
-
-# on all machines
 sudo yum -y install collectd
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
 sudo rpm -U ./amazon-cloudwatch-agent.rpm
+git clone https://github.com/PasaLab/OLAPBenchmark
 
 # on master
 cd ~/OLAPBenchmark
