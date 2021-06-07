@@ -53,7 +53,7 @@ def run():
         from engines.sparksql import sparksql
         engine = sparksql()
         engine.set_app_name(conf['name'])
-    if global_conf['engine'] == 'kylin':
+    elif global_conf['engine'] == 'kylin':
         conf_file = open("config/engines/kylin.yaml", encoding="UTF-8")
         conf = yaml.load(conf_file, Loader=yaml.FullLoader)
         from engines.kylin import kylin
