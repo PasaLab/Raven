@@ -24,22 +24,16 @@ class Valve:
         self.is_first_valve = True
 
     def run(self, context):
-        if self.concurrency > 1:
-            threads = []
-            for i in range(self.concurrency):
-                threads.append(Thread(target=self.run_thread, args=(context, i)))
-            self.logger.info("Concurrency detected. Starting threads...")
-            for thread in threads:
-                thread.start()
-            self.logger.info("Waiting for all threads to finish...")
-            for thread in threads:
-                thread.join()
-            self.logger.info("All threads finished!")
-        else:
-            self.logger.info("Starting the thread...")
-            self.logger.info("Waiting for all threads to finish...")
-            self.run_thread(context, 0)
-            self.logger.info("All threads finished!")
+        threads = []
+        for i in range(self.concurrency):
+            threads.append(Thread(target=self.run_thread, args=(context, i)))
+        self.logger.info("Starting threads...")
+        for thread in threads:
+            thread.start()
+        self.logger.info("Waiting for all threads to finish...")
+        for thread in threads:
+            thread.join()
+        self.logger.info("All threads finished!")
         self.logger.info("Stage finished!")
         self.logger.info("--------------------------------")
 
