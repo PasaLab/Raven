@@ -1,0 +1,33 @@
+metrics:
+  - time_tot_offline
+  - time_tot_online
+  - time_avg_offline
+  - time_avg_online
+  - queries_per_second
+  - time_max_online
+  - time_99th_quantile
+  - time_95th_quantile
+  - time_90th_quantile
+  - time_median_online
+  - time_between_queries
+  - time_variation_per_query
+  - cpu_avg_online
+  - cpu_free_time
+  - mem_avg_online
+  - mem_free_time
+  - cpu_load_balance
+  - mem_load_balance
+  - io_avg_time
+  - disk_usage
+offline:
+  calculation:
+    eval: 0
+  delay:
+    eval: 0
+online:
+  calculation:
+    eval: 0
+  delay:
+    eval: 0
+total:
+  eval: offline_calculation_overhead + offline_delay_overhead + online_calculation_overhead + online_delay_overhead
