@@ -1,0 +1,18 @@
+metrics:
+  - cpu_avg_online
+  - mem_avg_online
+  - cpu_load_balance
+  - mem_load_balance
+  - io_avg_time
+offline:
+  calculation:
+    eval: 0
+  delay:
+    eval: 0
+online:
+  calculation:
+    eval: 0.25 * (cpu_avg_online + mem_avg_online + cpu_load_balance + mem_load_balance)
+  delay:
+    eval: io_avg_time
+total:
+  eval: offline_calculation_overhead + offline_delay_overhead + online_calculation_overhead + online_delay_overhead
