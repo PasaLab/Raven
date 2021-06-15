@@ -12,7 +12,7 @@ def generate():
     global_conf = yaml.load(global_conf_file, Loader=yaml.FullLoader)
 
     try:
-        if global_conf['engine'] not in ['spark-sql', 'kylin', 'custom']:
+        if global_conf['engine'] not in ['spark-sql', 'kylin', 'presto', 'custom']:
             logger.error("Failed: invalid engine type")
             return
         if global_conf['workload'] not in ['tpc-h', 'custom']:
@@ -58,6 +58,11 @@ def run():
         conf = yaml.load(conf_file, Loader=yaml.FullLoader)
         from engines.kylin import kylin
         engine = kylin()
+    elif global_conf['engine'] == 'presto':
+        conf_file = open("config/engines/spark-sql.yaml", encoding="UTF-8")
+        conf = yaml.load(conf_file, Loader=yaml.FullLoader)
+        from engines.presto import presto
+        engine = presto()
     else:
         from engines.engine import engine
         engine = engine()

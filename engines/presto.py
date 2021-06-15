@@ -7,13 +7,16 @@ class presto(engine):
     def __init__(self):
         super().__init__()
         self.conn = None
+        self.conf = {}
 
     def launch(self):
         self.logger.info("Launching presto...")
         self.conn = prestodb.dbapi.connect(
-            host='$ip',
-            port='$port',
-            catalog='$catalog'
+            host=self.conf['host'],
+            port=self.conf['port'],
+            catalog='hive',
+            schema='default',
+            user='hadoop',
         )
         self.logger.info("Launch presto complete.")
 
@@ -31,4 +34,5 @@ class presto(engine):
         pass
 
     def set_conf(self, conf):
-        pass
+        for key, value in conf.items():
+            self.conf[key] = value

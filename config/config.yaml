@@ -1,4 +1,4 @@
-engine: spark-sql
+engine: presto
 workload: tpc-h
 test_plan: one-pass-concurrent
 metrics: resource-usage

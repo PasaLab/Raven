@@ -1,0 +1,4 @@
+name: presto
+config:
+  host: ip-172-31-27-128.ap-southeast-1.compute.internal
+  port: 8889
