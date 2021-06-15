@@ -48,7 +48,9 @@ cd kylin
 mkdir ext
 cp /usr/lib/hive/lib/hive-metastore-2.3.6-amzn-1.jar ext
 ./bin/check-env.sh
-
 /home/hadoop/kylin/bin/kylin.sh start
 
 /home/hadoop/kylin/bin/kylin.sh stop
+
+# Presto engine
+sudo python3 -m pip install presto-python-client
