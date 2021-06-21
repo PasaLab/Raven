@@ -46,7 +46,7 @@ config:
       - load: lineitem.tbl
         as: lineitem
 query:
-  database: use hive.tpch_flat_orc_2
+  database: use tpch_flat_orc_2
   sql:
     - name: KQ1
       description: Query 1 for Kylin

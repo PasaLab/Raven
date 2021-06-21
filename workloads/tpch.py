@@ -22,7 +22,7 @@ class tpch(workload):
             engine.query(sql)
 
     def load(self, engine):
-        engine.query(self.conf['create']['database'])
+        engine.query(self.conf['load']['database'])
         tables = self.conf['load']['tables']
         for table in tables:
             download("olapstorage", "tpch/" + table['load'], "./" + table['load'])
