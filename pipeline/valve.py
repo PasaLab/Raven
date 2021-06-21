@@ -77,6 +77,7 @@ class OnlineStage(Valve):
         self.concurrency = config['concurrency']
 
     def run_thread(self, context, thread_id):
+        context.engine.query("use " + context.queries['database'])
         for query in self.queries:
             for matching_query in context.queries['sql']:
                 if matching_query['name'] == query:

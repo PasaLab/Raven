@@ -8,6 +8,7 @@ class tpch(workload):
         super().__init__()
         self.conf = None
         self.switch = None
+        self.query = []
         self.logger = Logger('./log/benchmark.log', __name__)
 
     def generate(self):
@@ -16,10 +17,12 @@ class tpch(workload):
             upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "tpch/" + file)
 
     def create(self, engine):
+        engine.query("use " + self.conf['create']['database'])
         for sql in self.conf['create']['sql']:
             engine.query(sql)
 
     def load(self, engine):
+        engine.query("use " + self.conf['create']['database'])
         tables = self.conf['load']['tables']
         for table in tables:
             download("olapstorage", "tpch/" + table['load'], "./" + table['load'])
