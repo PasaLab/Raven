@@ -17,7 +17,6 @@ class tpch(workload):
             upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "tpch/" + file)
 
     def create(self, engine):
-        engine.query(self.conf['create']['database'])
         for sql in self.conf['create']['sql']:
             engine.query(sql)
 

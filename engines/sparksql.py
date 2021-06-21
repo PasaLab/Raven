@@ -22,7 +22,7 @@ class sparksql(engine):
         self.sql = sql
         if self.session is not None:
             start = time.time()
-            self.session.sql(self.sql).cache().show()
+            self.session.sql(self.sql).show()
             end = time.time()
             return end - start
         else:

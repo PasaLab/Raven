@@ -1,7 +1,7 @@
 switch:
   generate: false
-  create: true
-  load: true
+  create: false
+  load: false
 config:
   generate:
     path: /home/hadoop/tpch-kit/dbgen
@@ -16,8 +16,9 @@ config:
       - orders.tbl
       - lineitem.tbl
   create:
-    database: create database tpch_flat_orc_2
     sql:
+      - create database tpch_flat_orc_2
+      - use tpch_flat_orc_2
       - create table nation ( n_nationkey integer , n_name char(25) , n_regionkey integer , n_comment varchar(152)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
       - create table region ( r_regionkey integer , r_name char(25) , r_comment varchar(152)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
       - create table part ( p_partkey integer , p_name varchar(55) , p_mfgr char(25) , p_brand char(10) , p_type varchar(25) , p_size integer , p_container char(10) , p_retailprice DECIMAL(15,2) , p_comment varchar(23) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
