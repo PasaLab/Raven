@@ -16,7 +16,7 @@ config:
       - orders.tbl
       - lineitem.tbl
   create:
-    database: tpch_flat_orc_2
+    database: create schema hive.tpch_flat_orc_2
     sql:
       - create table nation ( n_nationkey integer , n_name char(25) , n_regionkey integer , n_comment varchar(152)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
       - create table region ( r_regionkey integer , r_name char(25) , r_comment varchar(152)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
@@ -27,7 +27,7 @@ config:
       - create table orders ( o_orderkey bigint , o_custkey integer , o_orderstatus char(1) , o_totalprice DECIMAL(15,2) , o_orderdate date , o_orderpriority char(15) , o_clerk char(15) , o_shippriority integer , o_comment varchar(79) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
       - create table lineitem ( l_orderkey bigint , l_partkey integer , l_suppkey integer , l_linenumber integer , l_quantity DECIMAL(15,2) , l_extendedprice DECIMAL(15,2) , l_discount DECIMAL(15,2) , l_tax DECIMAL(15,2) , l_returnflag char(1) , l_linestatus char(1) , l_shipdate date , l_commitdate date , l_receiptdate date , l_shipinstruct char(25) , l_shipmode char(10) , l_comment varchar(44) ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|';
   load:
-    database: tpch_flat_orc_2
+    database: use hive.tpch_flat_orc_2
     tables:
       - load: nation.tbl
         as: nation
@@ -46,7 +46,7 @@ config:
       - load: lineitem.tbl
         as: lineitem
 query:
-  database: tpch_flat_orc_2
+  database: use hive.tpch_flat_orc_2
   sql:
     - name: KQ1
       description: Query 1 for Kylin

@@ -16,10 +16,7 @@ class presto(engine):
         self.logger.info("Launching presto...")
         self.conn = prestodb.dbapi.connect(
             host=self.conf['host'],
-            port=self.conf['port'],
-            catalog='hive',
-            schema='default',
-            user='hadoop',
+            port=self.conf['port']
         )
         self.logger.info("Launch presto complete.")
 

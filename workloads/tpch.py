@@ -17,12 +17,12 @@ class tpch(workload):
             upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "tpch/" + file)
 
     def create(self, engine):
-        engine.query("use " + self.conf['create']['database'])
+        engine.query(self.conf['create']['database'])
         for sql in self.conf['create']['sql']:
             engine.query(sql)
 
     def load(self, engine):
-        engine.query("use " + self.conf['create']['database'])
+        engine.query(self.conf['create']['database'])
         tables = self.conf['load']['tables']
         for table in tables:
             download("olapstorage", "tpch/" + table['load'], "./" + table['load'])
