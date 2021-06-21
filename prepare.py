@@ -36,17 +36,20 @@ def prepare():
         for reservation in reservations['Reservations']:
             for instance in reservation['Instances']:
                 is_instance = False
-                for tag in instance['Tags']:
-                    if tag['Key'] == 'aws:elasticmapreduce:job-flow-id':
-                        if tag['Value'] == cid:
-                            is_instance = True
-                if is_instance:
+                try:
                     for tag in instance['Tags']:
-                        if tag['Key'] == 'aws:elasticmapreduce:instance-group-role':
-                            if tag['Value'] == 'MASTER':
-                                masters.append(instance)
-                            else:
-                                slaves.append(instance)
+                        if tag['Key'] == 'aws:elasticmapreduce:job-flow-id':
+                            if tag['Value'] == cid:
+                                is_instance = True
+                    if is_instance:
+                        for tag in instance['Tags']:
+                            if tag['Key'] == 'aws:elasticmapreduce:instance-group-role':
+                                if tag['Value'] == 'MASTER':
+                                    masters.append(instance)
+                                else:
+                                    slaves.append(instance)
+                except KeyError:
+                    pass
         if len(masters) == masters_to_find and len(slaves) == slaves_to_find:
             with open("./cloud/instances.csv", 'w') as f:
                 for instance in masters:

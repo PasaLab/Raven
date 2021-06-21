@@ -7,7 +7,10 @@ class presto(engine):
     def __init__(self):
         super().__init__()
         self.conn = None
-        self.conf = {}
+        self.conf = {
+            'host': 'localhost',
+            'port': '8889'
+        }
 
     def launch(self):
         self.logger.info("Launching presto...")
@@ -21,12 +24,11 @@ class presto(engine):
         self.logger.info("Launch presto complete.")
 
     def query(self, sql):
-        self.sql = sql
+        self.sql = sql.rstrip(';')
         start = time.time()
         cur = self.conn.cursor()
-        cur.execute(sql)
+        cur.execute(self.sql)
         rows = cur.fetchall()
-        print(rows)
         end = time.time()
         return end - start
 
@@ -35,4 +37,4 @@ class presto(engine):
 
     def set_conf(self, conf):
         for key, value in conf.items():
-            self.conf[key] = value
+            self.conf.setdefault(key, value)
