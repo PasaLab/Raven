@@ -47,6 +47,10 @@ export PATH=$PATH:$KYLIN_HOME/bin:$HIVE_HOME/bin
 cd kylin
 mkdir ext
 cp /usr/lib/hive/lib/hive-metastore-2.3.6-amzn-1.jar ext
+export hive_dependency=$HIVE_HOME/conf:$HIVE_HOME/lib/*:$HIVE_HOME/lib/hive-hcatalog-core.jar
+vim bin/kylin.sh
+export HBASE_CLASSPATH_PREFIX=${KYLIN_HOME}/conf:${KYLIN_HOME}/lib/*:${KYLIN_HOME}/ext/*:${hive_dependency}:${HBASE_CLASSPATH_PREFIX}
+
 ./bin/check-env.sh
 /home/hadoop/kylin/bin/kylin.sh start
 
