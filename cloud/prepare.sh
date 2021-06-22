@@ -4,6 +4,7 @@ sudo python3 -m pip install boto3
 sudo python3 -m pip install pyspark
 sudo python3 -m pip install requests
 sudo python3 -m pip install --upgrade pyyaml
+sudo python3 -m pip install presto-python-client
 sudo chmod -R 777 /tmp
 git clone https://github.com/gregrahn/tpch-kit
 cd ~/tpch-kit/dbgen
@@ -54,7 +55,9 @@ export HBASE_CLASSPATH_PREFIX=${KYLIN_HOME}/conf:${KYLIN_HOME}/lib/*:${KYLIN_HOM
 ./bin/check-env.sh
 /home/hadoop/kylin/bin/kylin.sh start
 
-/home/hadoop/kylin/bin/kylin.sh stop
+git clone https://github.com/Kyligence/kylin-tpch.git
+cd kylin-tpch
+./setup-kylin-model.sh 2
+cd ~/OLAPBenchmark
 
-# Presto engine
-sudo python3 -m pip install presto-python-client
+/home/hadoop/kylin/bin/kylin.sh stop
