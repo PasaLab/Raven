@@ -252,8 +252,8 @@ def analyze(metrics, timestamps, start, finish):
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
     if len(sys.argv) == 4:
-        start = sys.argv[2]
-        finish = sys.argv[3]
+        start = int(float(sys.argv[2]))
+        finish = int(float(sys.argv[3]))
         if sys.argv[1] == '-1':
             logger.warning("Cluster ID not specified. Use current metrics directly.")
         else:
