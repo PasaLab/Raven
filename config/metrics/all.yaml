@@ -21,13 +21,13 @@ metrics:
   - disk_usage
 offline:
   calculation:
-    eval: 0
+    eval: time_tot_offline
   delay:
     eval: 0
 online:
   calculation:
-    eval: 0
+    eval: time_tot_online * (1 - cpu_avg_online - mem_avg_online + cpu_load_balance + mem_load_balance)
   delay:
-    eval: 0
+    eval: (time_avg_online + time_max_online + time_90th_quantile + time_median_online) / (1 - time_variation_per_query / time_avg_online)
 total:
   eval: offline_calculation_overhead + offline_delay_overhead + online_calculation_overhead + online_delay_overhead
