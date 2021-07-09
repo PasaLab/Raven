@@ -2,7 +2,7 @@ import json
 import boto3
 import yaml
 import numpy as np
-from lib.boto3sdk import download
+import sys
 from lib.Logger import Logger
 import matplotlib.pyplot as plt
 
@@ -251,25 +251,26 @@ def analyze(metrics, timestamps, start, finish):
 
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
-    cluster_id = 'j-39BKBEK0AX54F'
-    start = 1624358940
-    finish = 1624359147
-    '''
-    m = get_metrics(cluster_id, start, finish)
-    with open("./metrics/metrics", 'w', encoding='utf-8') as f:
-        print(m, file=f)
-    download("olapstorage", "tmp/offline_times", "./metrics/offline_times")
-    download("olapstorage", "tmp/online_times", "./metrics/online_times")
-    '''
-    with open("./metrics/metrics", 'r', encoding='utf-8') as f:
-        m = json.loads(f.read().replace("'","\""))
-    t = {}
-    with open("./metrics/offline_times", 'r', encoding='utf-8') as f:
-        t['offline'] = json.loads(f.read().replace("'","\""))
-    with open("./metrics/online_times", 'r', encoding='utf-8') as f:
-        t['online'] = json.loads(f.read().replace("'","\""))
-    score = analyze(m, t, start, finish)
-    logger.info("--------------------------------")
-    logger.info("Benchmark finished.")
-    logger.info("--------------------------------")
-    #'''
+    if len(sys.argv) == 4:
+        start = sys.argv[2]
+        finish = sys.argv[3]
+        if sys.argv[1] == '-1':
+            logger.warning("Cluster ID not specified. Use current metrics directly.")
+        else:
+            cluster_id = sys.argv[1]
+            with open("./metrics/metrics", 'w', encoding='utf-8') as f:
+                print(get_metrics(cluster_id, start, finish), file=f)
+        with open("./metrics/metrics", 'r', encoding='utf-8') as f:
+            m = json.loads(f.read().replace("'", "\""))
+        t = {}
+        with open("./metrics/offline_times", 'r', encoding='utf-8') as f:
+            t['offline'] = json.loads(f.read().replace("'", "\""))
+        with open("./metrics/online_times", 'r', encoding='utf-8') as f:
+            t['online'] = json.loads(f.read().replace("'", "\""))
+        score = analyze(m, t, start, finish)
+        logger.info("--------------------------------")
+        logger.info("Benchmark finished.")
+        logger.info("--------------------------------")
+    else:
+        logger.error("Invalid arguments. Please give cluster ID, start time and finish time.")
+        logger.info("If you have collected metrics from CWAgent, please set cluster ID to -1.")
