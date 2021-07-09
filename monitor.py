@@ -17,12 +17,15 @@ def get_metrics(cid, start, end):
     for reservation in reservations['Reservations']:
         for instance in reservation['Instances']:
             is_instance = False
-            for tag in instance['Tags']:
-                if tag['Key'] == 'aws:elasticmapreduce:job-flow-id':
-                    if tag['Value'] == cid:
-                        is_instance = True
-            if is_instance:
-                responses.append(get_metrics_from_cwa(instance, start, end))
+            try:
+                for tag in instance['Tags']:
+                    if tag['Key'] == 'aws:elasticmapreduce:job-flow-id':
+                        if tag['Value'] == cid:
+                            is_instance = True
+                if is_instance:
+                    responses.append(get_metrics_from_cwa(instance, start, end))
+            except KeyError:
+                pass
     return responses
 
 
@@ -248,9 +251,9 @@ def analyze(metrics, timestamps, start, finish):
 
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
-    cluster_id = 'j-2AZXXJLHEDQV3'
-    start = 1623077184
-    finish = 1623078025
+    cluster_id = 'j-39BKBEK0AX54F'
+    start = 1624358940
+    finish = 1624359147
     '''
     m = get_metrics(cluster_id, start, finish)
     with open("./metrics/metrics", 'w', encoding='utf-8') as f:
@@ -258,7 +261,6 @@ if __name__ == '__main__':
     download("olapstorage", "tmp/offline_times", "./metrics/offline_times")
     download("olapstorage", "tmp/online_times", "./metrics/online_times")
     '''
-
     with open("./metrics/metrics", 'r', encoding='utf-8') as f:
         m = json.loads(f.read().replace("'","\""))
     t = {}
@@ -270,3 +272,4 @@ if __name__ == '__main__':
     logger.info("--------------------------------")
     logger.info("Benchmark finished.")
     logger.info("--------------------------------")
+    #'''

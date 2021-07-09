@@ -1,4 +1,4 @@
-engine: presto
+engine: kylin
 workload: tpc-h
 test_plan: one-pass
-metrics: resource-usage
+metrics: all

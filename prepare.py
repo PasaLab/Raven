@@ -6,14 +6,8 @@ from lib.popen import subprocess_popen
 
 def prepare():
     # 0. Initialize boto3 clients
-    emr = boto3.client('emr',
-                       region_name='ap-southeast-1',
-                       aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
-                       aws_secret_access_key='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')
-    ec2 = boto3.client('ec2',
-                       region_name='ap-southeast-1',
-                       aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
-                       aws_secret_access_key='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')
+    emr = boto3.client('emr')
+    ec2 = boto3.client('ec2')
 
     # 1. Create an EMR cluster on AWS
     logger.info("Creating the EMR cluster...")
