@@ -89,6 +89,7 @@ sudo python3 -m pip install requests
 sudo python3 -m pip install presto-python-client
 
 git clone https://github.com/PasaLab/OLAPBenchmark
+
 cd OLAPBenchmark
 mkdir log
 ```
