@@ -30,16 +30,16 @@ for cube_name in cube_names:
     while finished is False:
         time.sleep(30)
         response = json.loads(requests.request("GET", url, headers=headers, params=querystring).text)
+        message = None
         for item in response:
-            message = None
             if item['uuid'] == uuid:
                 message = item
                 break
-            if message is None:
-                logger.error("uuid not found!")
-                message = {'job_status': 'FINISHED'}
-            else:
-                logger.info("Build is " + message['job_status'] + ". Progress is " + str(round(message['progress'], 1)))
+        if message is None:
+            logger.error("uuid not found!")
+            message = {'job_status': 'FINISHED'}
+        else:
+            logger.info("Build is " + message['job_status'] + ". Progress is " + str(round(message['progress'], 1)))
         finished = True
         if message['job_status'] != 'FINISHED':
             finished = False
