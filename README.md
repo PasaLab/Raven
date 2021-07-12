@@ -70,8 +70,8 @@ After confirmation, you are connected to the EMR node. Now you can create the en
 For master nodes, run the following commands:
 ```
 cd ~
-sudo yum -y install git
-sudo python3 -m pip install boto3 pyhive
+sudo yum -y install git cyrus-sasl-devel.x86_64
+sudo python3 -m pip install boto3 sasl thrift thrift-sasl pyhive
 sudo python3 -m pip install --upgrade pyyaml
 sudo chmod -R 777 /tmp
 git clone https://github.com/gregrahn/tpch-kit
