@@ -84,12 +84,12 @@ def run():
         workload.set_switch(conf['switch'])
         workload.set_conf(conf['config'])
         if conf['switch']['create'] is True:
-            workload.create(engine)
+            workload.create()
             logger.info("Creating data tables successful!")
         else:
             logger.info("Creating data tables skipped!")
         if conf['switch']['load'] is True:
-            workload.load(engine)
+            workload.load()
             logger.info("Loading data to warehouse successful!")
         else:
             logger.info("Loading data to warehouse skipped!")
