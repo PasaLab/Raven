@@ -9,6 +9,7 @@
   - awscli 1.18.105 and above
   - boto3 1.17.69 and above
   - pyYAML 5.4.1 and above
+  - PyHive 0.6.4 and above
   - matplotlib 3.3.4 and above
   - numpy 1.19.5 and above
 
@@ -70,7 +71,7 @@ For master nodes, run the following commands:
 ```
 cd ~
 sudo yum -y install git
-sudo python3 -m pip install boto3
+sudo python3 -m pip install boto3 pyhive
 sudo python3 -m pip install --upgrade pyyaml
 sudo chmod -R 777 /tmp
 git clone https://github.com/gregrahn/tpch-kit
@@ -144,16 +145,22 @@ All engine-related configurations are in `./config/engines` directory. For the e
 ```
 Here, internal DNS address of the master node is needed. It can be found in `./cloud/instances.csv`.
 
-For the Presto engine, internal DNS address of the master node is also needed. The following congfigrations are necessary:
+For the Presto engine, internal DNS address of the master node is necessary. The following configurations are correct:
 ```
-  host: ip-172-31-6-136.ap-southeast-1.compute.internal
+  host: ip-a-b-c-d.ap-southeast-1.compute.internal
   port: 8889
 ```
 
-Some engines has their own way of configuring. Therefore, users need to follow the instructions to configure from developers of that engine.
+Some engines have their own way of configuring. Therefore, users need to follow the instructions to configure from developers of that engine.
 
 #### Your workloads
-Your workloads are configured in `./config/workloads` directory. For new users, their major focus is on enabling and disabling the steps in execution. There are three switches controlling whether to run these steps:
+Your workloads-related configurations are in `./config/workloads` directory. A valid host address, and a desirable database name for hive-based operations, are mandatory:
+```
+  host: ip-a-b-c-d.ap-southeast-1.compute.internal
+  database: tpch
+```
+
+For new users, another major focus is on enabling and disabling the steps in execution. There are three switches controlling whether to run these steps:
 - `generate`: Whether to generate data locally and update the generated data to S3.
 - `create`: Whether to create data tables into the dataset of the cluster. If data tables have been created, this option should be switched off.
 - `load`: Whether to load data from S3. If the data has been loaded once and no new data is created, this option should be switched off.
