@@ -2,6 +2,7 @@
 ## Installation
 The cluster is not installed with Apache Kylin by default. To install Kylin in your cluster, you need to download and configure Web UI dependencies first:
 ```shell
+cd ~
 wget https://downloads.apache.org/kylin/apache-kylin-3.1.2/apache-kylin-3.1.2-bin-hbase1x.tar.gz
 tar -zxvf apache-kylin-3.1.2-bin-hbase1x.tar.gz
 mv apache-kylin-3.1.2-bin-hbase1x kylin
@@ -59,6 +60,7 @@ sudo chmod -R 777 /tmp
 
 After that, clone our benchmark to the instance:
 ```shell
+cd ~
 git clone https://github.com/PasaLab/OLAPBenchmark
 ```
 To clone the benchmark, we need your GitHub account and password here.
@@ -66,3 +68,17 @@ To clone the benchmark, we need your GitHub account and password here.
 ## Configuration
 
 Configuration of the Kylin engine are in `$KYLIN_HOME/conf` directory. Users need to follow the instructions from Kylin developers to configure the engine.
+
+## Prepare Kylin cubes for TPC-H Workload
+If you want to use TPC-H as the workload, you can read this part.
+
+Apache Kylin has models to import to run TPC-H queries. You need to get that repository and run `setup-kylin-model.sh` to generate hive data. You SHOULD have Apache Kylin installed before running this script:
+
+```shell
+cd ~
+git clone https://github.com/Kyligence/kylin-tpch.git
+cd kylin-tpch
+./setup-kylin-model.sh 2
+```
+
+The script also creates a few simple views on top of the original TPC-H tables to allow Kylin pre-calculate some complex measures. The resulted E-R model topology is identical to the original TPC-H model.
