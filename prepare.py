@@ -45,7 +45,7 @@ def prepare():
                 except KeyError:
                     pass
         if len(masters) == masters_to_find and len(slaves) == slaves_to_find:
-            with open("./cloud/instances.csv", 'w') as f:
+            with open("./cloud/instances", 'w') as f:
                 for instance in masters:
                     print(str(instance['ImageId'] + ', ' + instance['InstanceId'] + ', '
                               + instance['InstanceType'] + ', ' + instance['KeyName'] + ', '
@@ -54,6 +54,17 @@ def prepare():
                     print(str(instance['ImageId'] + ', ' + instance['InstanceId'] + ', '
                               + instance['InstanceType'] + ', ' + instance['KeyName'] + ', '
                               + instance['PublicDnsName'] + ', ' + instance['PrivateDnsName']), file=f)
+                print("Commands:", file=f)
+                for instance in masters:
+                    print("ssh -i \"./cloud/" + str(instance['KeyName']) + ".pem\" -o StrictHostKeyCHecking=no hadoop@"
+                          + str(instance['PublicDnsName']), file=f)
+                for instance in slaves:
+                    print("ssh -i \"./cloud/" + str(instance['KeyName']) + ".pem\" -o StrictHostKeyCHecking=no hadoop@"
+                          + str(instance['PublicDnsName']), file=f)
+                print("Tunnels:", file=f)
+                for instance in masters:
+                    print("ssh -i \"./cloud/" + str(instance['KeyName']) + ".pem\" -N hadoop@" +
+                          str(instance['PublicDnsName']) + " -L PORT:localhost:PORT", file=f)
             found_flag = True
         else:
             logger.info("MASTERs to create: " + str(masters_to_find - len(masters)) + ", "
