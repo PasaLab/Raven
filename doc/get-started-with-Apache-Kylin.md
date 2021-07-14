@@ -69,7 +69,7 @@ To clone the benchmark, we need your GitHub account and password here.
 
 Configuration of the Kylin engine are in `$KYLIN_HOME/conf` directory. Users need to follow the instructions from Kylin developers to configure the engine.
 
-## Prepare Kylin cubes for TPC-H Workload
+## Prepare Kylin Cubes for TPC-H Workload
 If you want to use TPC-H as the workload, you can read this part.
 
 Apache Kylin has models to import to run TPC-H queries. You need to get that repository and run `setup-kylin-model.sh` to generate hive data. You SHOULD have Apache Kylin installed before running this script:
@@ -82,3 +82,14 @@ cd kylin-tpch
 ```
 
 The script also creates a few simple views on top of the original TPC-H tables to allow Kylin pre-calculate some complex measures. The resulted E-R model topology is identical to the original TPC-H model.
+
+After that, enter the web UI and click `System` - `Reload Metadata` to refresh the newly imported `tpch` model. 
+
+After the operations above, you can run the benchmark to utilize kylin cubing as part of offline computation by configuring the test plans like this:
+```yaml
+  commands:
+    - path: /home/hadoop/OLAPBenchmark/lib
+      command: python3 ./kylin_cubing.py
+```
+
+You need to keep the tunnel connected to keep the session alive.
