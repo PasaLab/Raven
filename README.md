@@ -49,15 +49,13 @@ For new users to Amazon AWS, you must test if your account can create a cluster.
 
 After recording these settings, you could shut down the test cluster.
 
-Configure the above-mentioned security-related settings in `./cloud/ec2-attributes.json`. You need to configure your `SubnetId`, `KeyName`, `EmrManagedSlaveSecurityGroup` and `EmrManagedMasterSecurityGroup` here.
-
-Then, create a cluster for the benchmark.
+You need to configure instances and applications to install for your cluster, please refer to [this instruction](./doc/how-to-configure-instances-of-a-cluster.md). Then, create a cluster for the benchmark:
 
 ```
 python3 ./prepare.py
 ```
 
-The application will monitor the process of cluster creation. After the end of the application, users can see the info of the created nodes of the cluster in `./cloud/instances.csv`. Here, you can see the public and privete DNS addresses of all nodes in the cluster. The first line refers to the master nodes, and slave nodes are in the following lines.
+The application will monitor the process of cluster creation. After the end of the application, users can see the info of the created nodes of the cluster in `./cloud/instances`. Here, you can see the public and privete DNS addresses of all nodes in the cluster. The first line refers to the master nodes, and slave nodes are in the following lines.
 
 ### Set up your cluster
 Connect to the nodes of the cluster with the `.pem` key file and public DNS address, like:
@@ -65,7 +63,7 @@ Connect to the nodes of the cluster with the `.pem` key file and public DNS addr
 ssh -i "./cloud/YOURKEYNAME.pem" hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com
 ```
 
-After confirmation, you are connected to the EMR node. Now you can create the environment needed for benchmark testing.
+This command is also available in `./cloud/instances`. Now you can create the environment needed for benchmark testing.
 
 For master nodes, run the following commands:
 ```
@@ -82,13 +80,6 @@ sudo yum -y install collectd
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
 sudo rpm -U ./amazon-cloudwatch-agent.rpm
 
-# for spark-sql users
-sudo python3 -m pip install pyspark
-# for kylin users
-sudo python3 -m pip install requests
-# for presto users
-sudo python3 -m pip install presto-python-client
-
 git clone https://github.com/PasaLab/OLAPBenchmark
 
 cd OLAPBenchmark
@@ -104,9 +95,21 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/a
 sudo rpm -U ./amazon-cloudwatch-agent.rpm
 ```
 
-The cluster is installed with Spark-SQL and Presto by default. If the user wants to install and test other engines, the user has to run their own commands. Take Apache Kylin 3.1 as an example:
+The cluster is installed with Spark-SQL and Presto by default. If the user wants to install and test other engines, the user has to run their own commands. The instructions of supported engines are below:
+
+|Engine Name|Instruction|
+|---|---|
+|Spark-SQL|[Instruction](./doc/get-started-with-Spark-SQL.md)|
+|Presto|[Instruction](./doc/get-started-with-Presto.md)|
+|Apache Kylin|[Instruction](./doc/get-started-with-Apache-Kylin.md)|
 
 ```
+# for spark-sql users
+sudo python3 -m pip install pyspark
+# for kylin users
+sudo python3 -m pip install requests
+# for presto users
+sudo python3 -m pip install presto-python-client
 wget https://downloads.apache.org/kylin/apache-kylin-3.1.2/apache-kylin-3.1.2-bin-hbase1x.tar.gz
 tar -zxvf apache-kylin-3.1.2-bin-hbase1x.tar.gz
 mv apache-kylin-3.1.2-bin-hbase1x kylin
