@@ -5,8 +5,8 @@ This file is the command to create a cluster via AWS CLI. It begins with the bas
 |Option|Default Value|Description|
 |---|---|---|
 |applications|`Name=Hadoop ...`|Define applications you need to create an EMR cluster*
-|ec2-attributes|`file://cloud/ec2-attributes.json`|Attributes of the EC2 instances. See [here](#./cloud/ec2-attributes.json).
-|instance-groups|`file://cloud/instance-groups.json`|Configuration for your cluster. See [here](#./cloud/instance-groups.json).
+|ec2-attributes|`file://cloud/ec2-attributes.json`|Attributes of the EC2 instances. See [here](#cloudec2attributesjson).
+|instance-groups|`file://cloud/instance-groups.json`|Configuration for your cluster. See [here](#cloudinstancegroupsjson).
 |name|`olap_test`|The name of the cluster
 |region|`ap-southeast-1`|Your region to create the cluster|
 |release-label|`emr-5.29.0`|Define the version of applications
