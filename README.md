@@ -65,17 +65,6 @@ ssh -i "./cloud/YOURKEYNAME.pem" hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws
 
 This command is also available in `./cloud/instances`.
 
-#### General Configuration
-With the built environment, you need to perform some configuration to run tests. All configurations are in `./config` directory on the master node.
-
-`./config/config.yaml` defines the templates to be used for the benchmark. For example:
-```yaml
-engine: spark-sql/kylin/presto
-workload: tpc-h
-test_plan: one-pass/one-pass-concurrent/one-offline-multi-online
-metrics: all/time
-```
-
 #### Build your engine
 Now you can create the environment needed for benchmark testing. Different engines have different environment set-up procedures. Please follow the instructions below:
 
@@ -111,6 +100,17 @@ Metric-related configurations are in `./config/metrics` directory. New users cou
 Advanced users can change the metrics to be calculated as well as the way to generate the total cost score with the calculated values above with weight. All formulae should follow the grammar rules of python's `eval` function.
 
 This benchmark uses cloud watch service to get metric data. The configuration of `CWAgent` on AWS machines can be edited in `./cloud/cwaconfig.json`. You can reference `CWAgent` documents on AWS to configure this file.
+
+#### General Configuration
+With the built environment, you need to perform some configuration to run tests. All configurations are in `./config` directory on the master node.
+
+`./config/config.yaml` defines the templates to be used for the benchmark. For example:
+```yaml
+engine: spark-sql/kylin/presto
+workload: tpc-h
+test_plan: one-pass/one-pass-concurrent/one-offline-multi-online
+metrics: all/time
+```
 
 #### Copy your configuration to other machines
 Switch to your machine, use `scp` command to send configured project to your machine:
