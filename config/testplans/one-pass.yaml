@@ -3,8 +3,12 @@ offline:
   description: offline stage
   concurrency: 1
   commands:
-    - path: /home/hadoop/tpch-kit/dbgen
-      command: ls
+    - path: /home/hadoop/
+      command: git clone https://github.com/Kyligence/kylin-tpch.git
+    - path: /home/hadoop/kylin-tpch
+      command: sh setup-kylin-model.sh 1
+    - path: /home/hadoop/OLAPBenchmark/lib
+      script: python3 kylin_cubing.py
 online:
   name: online
   description: online stage

@@ -1,7 +1,9 @@
 from workloads.workload import workload
+from pyhive import hive
 from lib.boto3sdk import upload, download
 from lib.Logger import Logger
 from lib.popen import subprocess_popen
+
 
 class tpch(workload):
     def __init__(self):
@@ -16,18 +18,26 @@ class tpch(workload):
         for file in self.conf['generate']['files']:
             upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "tpch/" + file)
 
-    def create(self, engine):
+    def create(self):
+        hive_conn = hive.Connection(host=self.conf['host'], port=10000, username='hadoop')
+        cursor = hive_conn.cursor()
+        sql = "create database if not exists " + self.conf['database']
+        cursor.execute(sql)
+        hive_conn = hive.Connection(host=self.conf['host'], port=10000, username='hadoop',
+                                    database=self.conf['database'])
+        cursor = hive_conn.cursor()
         for sql in self.conf['create']['sql']:
-            engine.query(sql)
+            cursor.execute(sql)
 
-    def load(self, engine):
-        engine.query(self.conf['load']['database'])
-        tables = self.conf['load']['tables']
-        for table in tables:
+    def load(self):
+        hive_conn = hive.Connection(host=self.conf['host'], port=10000, username='hadoop',
+                                    database=self.conf['database'])
+        cursor = hive_conn.cursor()
+        for table in self.conf['load']['tables']:
             download("olapstorage", "tpch/" + table['load'], "./" + table['load'])
-        for table in tables:
-            sql = "LOAD DATA LOCAL INPATH './" + table['load'] + "' INTO TABLE " + table['as']
-            engine.query(sql)
+        for table in self.conf['load']['tables']:
+            sql = "LOAD DATA LOCAL INPATH '/home/hadoop/OLAPBenchmark/" + table['load'] + "' INTO TABLE " + table['as']
+            cursor.execute(sql)
             self.logger.info("Successfully uploaded " + table['load'] + " as " + table['as'] + ".")
 
     def delete(self):

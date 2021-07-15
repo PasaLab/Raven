@@ -15,7 +15,7 @@
       "EbsOptimized": true
     },
     "InstanceGroupType": "MASTER",
-    "InstanceType": "m4.xlarge",
+    "InstanceType": "m4.large",
     "Name": "master"
   },
   {
@@ -34,7 +34,7 @@
       "EbsOptimized": false
     },
     "InstanceGroupType": "CORE",
-    "InstanceType": "m4.large",
+    "InstanceType": "m4.2xlarge",
     "Name": "slave"
   }
 ]

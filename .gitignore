@@ -3,9 +3,6 @@ demo.mp4
 /venv/
 /.idea/
 cloud/olap.pem
-cloud/instances.csv
+cloud/instances
 /metrics/
 /log/
-metrics/offline_times
-metrics/online_times
-log/benchmark.log

@@ -11,11 +11,11 @@ class workload(object):
         pass
 
     @abstractmethod
-    def create(self, engine):
+    def create(self):
         pass
 
     @abstractmethod
-    def load(self, engine):
+    def load(self):
         pass
 
     @abstractmethod

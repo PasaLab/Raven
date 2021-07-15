@@ -1,4 +1,4 @@
 name: SparkSQL-TPCH
 config:
-  hive.metastore.uris: thrift://ip-172-31-31-183.ap-southeast-1.compute.internal:9083
-  spark.sql.warehouse.dir: hdfs://ip-172-31-31-183.ap-southeast-1.compute.internal:8020/user/hive/warehouse
+  hive.metastore.uris: thrift://localhost:9083
+  spark.sql.warehouse.dir: hdfs://localhost:8020/user/hive/warehouse
