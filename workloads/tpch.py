@@ -24,7 +24,7 @@ class tpch(workload):
         sql = "create database if not exists " + self.conf['database']
         cursor.execute(sql)
         hive_conn = hive.Connection(host=self.conf['host'], port=10000, username='hadoop',
-                                    database=self.conf['database')
+                                    database=self.conf['database'])
         cursor = hive_conn.cursor()
         for sql in self.conf['create']['sql']:
             cursor.execute(sql)
