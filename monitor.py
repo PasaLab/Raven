@@ -237,6 +237,43 @@ def analyze(metrics, timestamps, start, finish):
     # ax.set_ylim(0,1)
     # ax.set_title('Benchmark Results - resources', fontsize=20)
     # plt.show()
+    logger.debug("--------------------------------")
+    if 'time_tot_offline' in conf['metrics']:
+        logger.debug("time_tot_offline: " + str(time_tot_offline))
+    if 'time_tot_online' in conf['metrics']:
+        logger.debug("time_tot_online: " + str(time_tot_online))
+    if 'time_avg_offline' in conf['metrics']:
+        logger.debug("time_avg_offline: " + str(time_avg_offline))
+    if 'time_avg_online' in conf['metrics'] or 'queries_per_second' in conf['metrics']:
+        logger.debug("time_avg_online: " + str(time_avg_online))
+        logger.debug("queries_per_second: " + str(queries_per_second))
+    if 'time_max_online' in conf['metrics']:
+        logger.debug("time_max_online: " + str(time_max_online))
+    if 'time_99th_quantile' in conf['metrics'] or 'time_95th_quantile' in conf['metrics']\
+            or 'time_90th_quantile' in conf['metrics'] or 'time_median_online' in conf['metrics']:
+        logger.debug("time_99th_quantile: " + str(time_99th_quantile))
+        logger.debug("time_95th_quantile: " + str(time_95th_quantile))
+        logger.debug("time_90th_quantile: " + str(time_90th_quantile))
+        logger.debug("time_median_online: " + str(time_median_online))
+    if 'time_between_queries' in conf['metrics']:
+        logger.debug("time_between_queries: " + str(time_between_queries))
+    if 'time_variation_per_query' in conf['metrics']:
+        logger.debug("time_variation_per_query: " + str(time_variation_per_query))
+    if 'cpu_avg_online' in conf['metrics'] or 'cpu_free_time' in conf['metrics']:
+        logger.debug("cpu_avg_online: " + str(cpu_avg_online))
+        logger.debug("cpu_free_time: " + str(cpu_free_time))
+    if 'mem_avg_online' in conf['metrics'] or 'mem_free_time' in conf['metrics']:
+        logger.debug("mem_avg_online: " + str(mem_avg_online))
+        logger.debug("mem_free_time: " + str(mem_free_time))
+    if 'cpu_load_balance' in conf['metrics']:
+        logger.debug("cpu_load_balance: " + str(cpu_load_balance))
+    if 'mem_load_balance' in conf['metrics']:
+        logger.debug("mem_load_balance: " + str(mem_load_balance))
+    if 'io_avg_time' in conf['metrics']:
+        logger.debug("io_avg_time: " + str(io_avg_time))
+    if 'disk_usage' in conf['metrics']:
+        logger.debug("disk_usage: " + str(disk_usage))
+        disk_usage = temp_disk_usage / temp_disk_usage_cnt * 0.01
     logger.info("--------------------------------")
     logger.info("Offline calculation overhead: " + str(round(offline_calculation_overhead, 3)))
     logger.info("Offline delay overhead: " + str(round(offline_delay_overhead, 3)))
@@ -249,6 +286,23 @@ def analyze(metrics, timestamps, start, finish):
     return overhead
 
 
+if __name__ == '__main__':
+    logger = Logger('./log/benchmark.log', 'monitor')
+    start = 1624358900
+    finish = 1624359200
+    with open("./metrics/metrics", 'r', encoding='utf-8') as f:
+        m = json.loads(f.read().replace("'", "\""))
+        t = {}
+    with open("./metrics/offline_times", 'r', encoding='utf-8') as f:
+        t['offline'] = json.loads(f.read().replace("'", "\""))
+    with open("./metrics/online_times", 'r', encoding='utf-8') as f:
+        t['online'] = json.loads(f.read().replace("'", "\""))
+    score = analyze(m, t, start, finish)
+    logger.info("--------------------------------")
+    logger.info("Benchmark finished.")
+    logger.info("--------------------------------")
+
+'''
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
     if len(sys.argv) == 4:
@@ -274,3 +328,4 @@ if __name__ == '__main__':
     else:
         logger.error("Invalid arguments. Please give cluster ID, start time and finish time.")
         logger.info("If you have collected metrics from CWAgent, please set cluster ID to -1.")
+'''
