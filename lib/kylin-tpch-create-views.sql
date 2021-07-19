@@ -1,4 +1,5 @@
 
+
 drop view v_lineitem;
 
 create view if not exists v_lineitem as
