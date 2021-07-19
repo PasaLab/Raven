@@ -8,10 +8,7 @@ import matplotlib.pyplot as plt
 
 
 def get_metrics(cid, start, end):
-    ec2 = boto3.client('ec2',
-                       region_name='ap-southeast-1',
-                       aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
-                       aws_secret_access_key='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')
+    ec2 = boto3.client('ec2')
     reservations = ec2.describe_instances()
     responses = []
     for reservation in reservations['Reservations']:
@@ -30,10 +27,7 @@ def get_metrics(cid, start, end):
 
 
 def get_metrics_from_cwa(instance, start, end):
-    cw = boto3.client('cloudwatch',
-                      region_name='ap-southeast-1',
-                      aws_access_key_id='AKIASNVXWRHNSSQ3M2AA',
-                      aws_secret_access_key='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')
+    cw = boto3.client('cloudwatch')
 
     with open('./cloud/metrics.json', 'r', encoding="utf-8") as f:
         metrics = json.load(f)
