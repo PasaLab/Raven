@@ -61,7 +61,7 @@ def get_metrics_from_cwa(instance, start, end):
     return my_response
 
 
-def analyze(metrics, timestamps, start, finish):
+def analyze(metrics, timestamps):
     global_conf_file = open("config/config.yaml", encoding="UTF-8")
     global_conf = yaml.load(global_conf_file, Loader=yaml.FullLoader)
     try:
@@ -282,26 +282,19 @@ def analyze(metrics, timestamps, start, finish):
 
 if __name__ == '__main__':
     logger = Logger('./log/benchmark.log', 'monitor')
-    start = 1624358900
-    finish = 1624359200
-    with open("./metrics/metrics", 'r', encoding='utf-8') as f:
-        m = json.loads(f.read().replace("'", "\""))
+    if len(sys.argv) == 2:
         t = {}
-    with open("./metrics/offline_times", 'r', encoding='utf-8') as f:
-        t['offline'] = json.loads(f.read().replace("'", "\""))
-    with open("./metrics/online_times", 'r', encoding='utf-8') as f:
-        t['online'] = json.loads(f.read().replace("'", "\""))
-    score = analyze(m, t, start, finish)
-    logger.info("--------------------------------")
-    logger.info("Benchmark finished.")
-    logger.info("--------------------------------")
-
-'''
-if __name__ == '__main__':
-    logger = Logger('./log/benchmark.log', 'monitor')
-    if len(sys.argv) == 4:
-        start = int(float(sys.argv[2]))
-        finish = int(float(sys.argv[3]))
+        with open("./metrics/offline_times", 'r', encoding='utf-8') as f:
+            t['offline'] = json.loads(f.read().replace("'", "\""))
+        with open("./metrics/online_times", 'r', encoding='utf-8') as f:
+            t['online'] = json.loads(f.read().replace("'", "\""))
+        start = -1
+        finish = -1
+        for item in t['offline']:
+            if start == -1 or (start != -1 and item['start'] < start):
+                start = item['start']
+            if finish == -1 or (finish != -1 and item['finish'] > finish):
+                finish = item['finish']
         if sys.argv[1] == '-1':
             logger.warning("Cluster ID not specified. Use current metrics directly.")
         else:
@@ -310,16 +303,10 @@ if __name__ == '__main__':
                 print(get_metrics(cluster_id, start, finish), file=f)
         with open("./metrics/metrics", 'r', encoding='utf-8') as f:
             m = json.loads(f.read().replace("'", "\""))
-        t = {}
-        with open("./metrics/offline_times", 'r', encoding='utf-8') as f:
-            t['offline'] = json.loads(f.read().replace("'", "\""))
-        with open("./metrics/online_times", 'r', encoding='utf-8') as f:
-            t['online'] = json.loads(f.read().replace("'", "\""))
-        score = analyze(m, t, start, finish)
+        score = analyze(m, t)
         logger.info("--------------------------------")
         logger.info("Benchmark finished.")
         logger.info("--------------------------------")
     else:
         logger.error("Invalid arguments. Please give cluster ID, start time and finish time.")
         logger.info("If you have collected metrics from CWAgent, please set cluster ID to -1.")
-'''
