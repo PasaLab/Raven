@@ -7,6 +7,9 @@ from Logger import Logger
 logger = Logger('../log/benchmark.log', 'kylin_cubing')
 cube_names = ["lineitem_cube", "partsupp_cube", "customer_vorder_cube", "customer_cube"]
 
+url = "http://localhost:7070/kylin/api/cache/announce/all/all/update"
+response = requests.request("PUT", url)
+
 for cube_name in cube_names:
     url = "http://localhost:7070/kylin/api/cubes/" + cube_name + "/rebuild"
     payload = "{\"buildType\":\"BUILD\",\"startTime\":757382400000,\"endTime\":915148800000," \

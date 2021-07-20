@@ -19,6 +19,10 @@ class tpch(workload):
             upload(self.conf['generate']['path'] + "/" + file, "olapstorage", "tpch/" + file)
 
     def create(self):
+        hive_conn = hive.Connection(host=self.conf['host'], port=10000, username='hadoop')
+        cursor = hive_conn.cursor()
+        sql = "create database if not exists " + self.conf['database']
+        cursor.execute(sql)
         hive_conn = hive.Connection(host=self.conf['host'], port=10000, username='hadoop',
                                     database=self.conf['database'])
         cursor = hive_conn.cursor()
@@ -32,7 +36,7 @@ class tpch(workload):
         for table in self.conf['load']['tables']:
             download("olapstorage", "tpch/" + table['load'], "./" + table['load'])
         for table in self.conf['load']['tables']:
-            sql = "LOAD DATA LOCAL INPATH './" + table['load'] + "' INTO TABLE " + table['as']
+            sql = "LOAD DATA LOCAL INPATH '/home/hadoop/OLAPBenchmark/" + table['load'] + "' INTO TABLE " + table['as']
             cursor.execute(sql)
             self.logger.info("Successfully uploaded " + table['load'] + " as " + table['as'] + ".")
 
