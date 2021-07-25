@@ -30,8 +30,8 @@ Download this Benchmark with a git command:
 
 ```shell
 git clone https://github.com/PasaLab/OLAPBenchmark.git
+
 cd OLAPBenchmark
-mkdir log
 ```
 
 You need to input your username and password of GitHub to download it.
