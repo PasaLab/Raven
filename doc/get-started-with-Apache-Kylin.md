@@ -106,9 +106,7 @@ Apache Kylin has models to import to run TPC-H queries. You need to get that rep
 
 ```shell
 cd ~
-
-cd kylin-tpch
-./setup-kylin-model.sh 1
+git clone https://github.com/Kyligence/kylin-tpch.git
 ```
 
 The script also creates a few simple views on top of the original TPC-H tables to allow Kylin pre-calculate some complex measures. The resulted E-R model topology is identical to the original TPC-H model.
@@ -118,8 +116,6 @@ After that, enter the web UI and click `System` - `Reload Metadata` to refresh t
 After the operations above, you can run the benchmark to utilize kylin cubing as part of offline computation by configuring the test plans like this:
 ```yaml
   commands:
-    - path: /home/hadoop
-      command: git clone https://github.com/Kyligence/kylin-tpch.git
     - path: /home/hadoop/kylin-tpch
       command: sh ./setup-kylin-model.sh 1
     - path: /home/hadoop/OLAPBenchmark/lib
