@@ -38,14 +38,18 @@ Make the changes take effect:
 source ~/.bashrc
 ```
 
+Configure Hive jar dependencies:
+```shell
+sudo mv $HIVE_HOME/lib/jackson-datatype-joda-2.4.6.jar $HIVE_HOME/lib/jackson-datatype-joda-2.4.6.jar.backup
+```
+
 Edit `./bin/kylin.sh`:
 ```shell
 export HBASE_CLASSPATH_PREFIX=${tomcat_root}/bin/bootstrap.jar:${tomcat_root}/bin/tomcat-juli.jar:${tomcat_root}/lib/*:$hive_dependency:$HBASE_CLASSPATH_PREFIX
 ```
 
-Replace conflicting jar files them with correct ones:
+Replace conflicting jar files them with correct ones and upload it to hdfs:
 ```shell
-sudo mv $HIVE_HOME/lib/jackson-datatype-joda-2.4.6.jar $HIVE_HOME/lib/jackson-datatype-joda-2.4.6.jar.backup
 rm -rf $KYLIN_HOME/spark_jars
 mkdir $KYLIN_HOME/spark_jars
 cp /usr/lib/spark/jars/*.jar $KYLIN_HOME/spark_jars
@@ -57,6 +61,7 @@ hadoop fs -mkdir /kylin
 hadoop fs -mkdir /kylin/package
 hadoop fs -put spark-libs.jar /kylin/package/
 ```
+By now, you have solved dependency conflicts of Kylin on an EMR cluster.
 
 ### Start a Kylin instance
 Now, launch Kylin:
