@@ -174,7 +174,7 @@ Other metrics can be collected when running the calculation script. It will also
 
 You have known the start and finish time of the application. With that two timestamps, run the following commands to get the cost score:
 ```shell
-python3 ./monitor.py j-YOURCLUSTERID START_TIME FINISH_TIME
+python3 ./monitor.py j-YOURCLUSTERID
 ```
 Your cluster ID is available in `./log/benchmark.log` of your local machine. If you have downloaded the metric file of `CWAgent` in `./metrics/metric`, you can run
 ```shell
