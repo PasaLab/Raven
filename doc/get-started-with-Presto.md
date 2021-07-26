@@ -19,9 +19,4 @@ git clone https://github.com/PasaLab/OLAPBenchmark
 To clone the benchmark, we need your GitHub account and password here.
 
 ## Configuration
-For the Presto engine, the following configurations are correct:
-```yaml
-  host: ip-a-b-c-d.ap-southeast-1.compute.internal
-  port: 8889
-```
-Here, you need the internal DNS address of the master node, which can be found in `./cloud/instances`.
+The configuration file is in `./config/engines/presto.yaml`. Users can put system-level configurations here.
