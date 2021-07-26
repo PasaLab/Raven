@@ -48,6 +48,11 @@ Edit `./bin/kylin.sh`:
 export HBASE_CLASSPATH_PREFIX=${tomcat_root}/bin/bootstrap.jar:${tomcat_root}/bin/tomcat-juli.jar:${tomcat_root}/lib/*:$hive_dependency:$HBASE_CLASSPATH_PREFIX
 ```
 
+Configure in `./conf/kylin.properties`:
+```shell
+kylin.engine.spark-conf.spark.yarn.archive=PATH_TO_SPARK_LIB
+```
+
 Replace conflicting jar files them with correct ones and upload it to hdfs:
 ```shell
 rm -rf $KYLIN_HOME/spark_jars
