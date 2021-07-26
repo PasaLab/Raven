@@ -26,5 +26,8 @@ For new users, another major focus is on enabling and disabling the steps in exe
 - `create`: Whether to create data tables into the dataset of the cluster. If data tables have been created, this option should be switched off.
 - `load`: Whether to load data from S3. If the data has been loaded once and no new data is created, this option should be switched off.
 
+### Make engines compatible to Kylin-based queries
+To keep the engines have the same meaning in SQL queries, some views need to be created before running other engines. The creation of these views are in `./lib/kylin-tpch-create-views.sql`. The specified database should be here as well by adding `use <database_name>; ` in the first line, like `use tpch;`
+
 ### Manage query SQLs
 Advanced users can change the SQLs of the workload as well as the commands of generating, loading data and creating data tables. For different engines, we have different descriptions of query SQLs with the same meaning. Users can choose desirable SQLs from either `tpch-standard.yaml` or `tpch-for-kylin.yaml`.
