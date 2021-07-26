@@ -16,7 +16,7 @@ You can configure this workload at `./config/workloads/tpch.yaml`.
 ### Set your host address and database name
 A valid host address, and a desirable database name for hive-based operations, are mandatory:
 ```yaml
-  host: ip-a-b-c-d.ap-southeast-1.compute.internal
+  host: localhost
   database: tpch
 ```
 
