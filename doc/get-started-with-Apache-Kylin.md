@@ -1,51 +1,76 @@
 # Get Started with Apache Kylin
 ## Installation
-The cluster is not installed with Apache Kylin by default. To install Kylin in your cluster, you need to download and configure Web UI dependencies first:
+The cluster is not installed with Apache Kylin by default. To install Kylin in your cluster, you need to download it first:
 ```shell
 cd ~
 wget https://downloads.apache.org/kylin/apache-kylin-3.1.2/apache-kylin-3.1.2-bin-hbase1x.tar.gz
 tar -zxvf apache-kylin-3.1.2-bin-hbase1x.tar.gz
 mv apache-kylin-3.1.2-bin-hbase1x kylin
-export KYLIN_HOME=/home/hadoop/kylin
-export HIVE_HOME=/usr/lib/hive
-export HIVE_CONF_DIR=/usr/lib/hive/conf
-export PATH=$PATH:$KYLIN_HOME/bin:$HIVE_HOME/bin
-cd kylin
-mkdir ext
-cp /usr/lib/hive/lib/hive-metastore-2.3.6-amzn-1.jar ext
-/home/hadoop/kylin/bin/kylin.sh start
 ```
 
-Now, build up a tunnel to the remote instance to check if you have launched Kylin properly. For Windows devices, you can use SSH tools like `XShell` to build up a tunnel. For Linux-based devices,
+Then, you need to configure it to run on AWS.
+
+### Solve dependency conflicts
+Configure `conf/kylin_job_conf.xml` and add the following property:
+```xml
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>localhost</value>
+    </property>
+```
+
+Adding the following contents to `~/.bashrc`:
+```shell
+export HIVE_HOME=/usr/lib/hive
+export HADOOP_HOME=/usr/lib/hadoop
+export HBASE_HOME=/usr/lib/hbase
+export SPARK_HOME=/usr/lib/spark
+export KYLIN_HOME=/home/hadoop/kylin
+export HCAT_HOME=/usr/lib/hive-hcatalog
+export KYLIN_CONF_HOME=$KYLIN_HOME/conf
+export tomcat_root=$KYLIN_HOME/tomcat
+export hive_dependency=$HIVE_HOME/conf:$HIVE_HOME/lib/*:$HIVE_HOME/lib/hive-hcatalog-core.jar:/usr/share/aws/hmclient/lib/*:$SPARK_HOME/jars/*:$HBASE_HOME/lib/*.jar:$HBASE_HOME/*.jar:$HIVE_HOME/lib/hive-exec-2.3.6-amzn-2.jar,$HIVE_HOME/lib/hive-metastore.jar,$HIVE_HOME/lib/hive-metastore-2.3.6-amzn-2.jar,$HIVE_HOME/lib/hive-exec.jar,$HIVE_HOME/lib/hive-hcatalog-core-2.3.6-amzn-2.jar
+export PATH=$KYLIN_HOME/bin:$PATH
+```
+
+Make the changes take effect:
+```shell
+source ~/.bashrc
+```
+
+Edit `./bin/kylin.sh`:
+```shell
+export HBASE_CLASSPATH_PREFIX=${tomcat_root}/bin/bootstrap.jar:${tomcat_root}/bin/tomcat-juli.jar:${tomcat_root}/lib/*:$hive_dependency:$HBASE_CLASSPATH_PREFIX
+```
+
+Replace conflicting jar files them with correct ones:
+```shell
+sudo mv $HIVE_HOME/lib/jackson-datatype-joda-2.4.6.jar $HIVE_HOME/lib/jackson-datatype-joda-2.4.6.jar.backup
+rm -rf $KYLIN_HOME/spark_jars
+mkdir $KYLIN_HOME/spark_jars
+cp /usr/lib/spark/jars/*.jar $KYLIN_HOME/spark_jars
+cp -f /usr/lib/hbase/lib/*.jar $KYLIN_HOME/spark_jars
+rm -f $KYLIN_HOME/spark_jars/netty-3.9.9.Final.jar 
+rm -f $KYLIN_HOME/spark_jars/netty-all-4.1.8.Final.jar
+jar cv0f spark-libs.jar -C $KYLIN_HOME/spark_jars .
+hadoop fs -mkdir /kylin
+hadoop fs -mkdir /kylin/package
+hadoop fs -put spark-libs.jar /kylin/package/
+```
+
+### Start a Kylin instance
+Now, launch Kylin:
+```shell
+$KYLIN_HOME/bin/kylin.sh start
+```
+
+You can build up a tunnel to the remote instance to check if you have launched Kylin properly. For Windows devices, you can use SSH tools like `XShell` to build up a tunnel. For Linux-based devices,
  you can build a tunnel by running the following command on your local machine:
 ```shell
 ssh -i "./cloud/YOURKEYNAME.pem" -N hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com -L 7070:localhost:7070
 ```
 
-Visit `localhost:7070`, you can see the login page of Kylin. However, Hive is still not runnable here due to lack of hive dependencies. Stop the Kylin instance:
-
-```shell
-/home/hadoop/kylin/bin/kylin.sh stop
-```
-
-Add hive dependency:
-```shell
-export hive_dependency=$HIVE_HOME/conf:$HIVE_HOME/lib/*:$HIVE_HOME/lib/hive-hcatalog-core.jar
-```
-
-Modify `/home/hadoop/kylin/bin/kylin.sh`, change line 54 into:
-```shell
-export HBASE_CLASSPATH_PREFIX=${KYLIN_HOME}/conf:${KYLIN_HOME}/lib/*:${KYLIN_HOME}/ext/*:${hive_dependency}:${HBASE_CLASSPATH_PREFIX}
-```
-
-Finally, restart the Kylin engine:
-```
-/home/hadoop/kylin/bin/kylin.sh start
-```
-
-Till now, a working Kylin instance is available.
-
-Even though we encountered problems in the installing process, you CANNOT solve two dependency problems together, or those dependency problems would still exist.
+Visit `localhost:7070`, you can see the login page of Kylin. Till now, a working Kylin instance is available.
 
 ## Cluster Environment
 To build up the cluster environment, you need prepare for necessary packages for benchmark execution. For the master node, run the following commands:
@@ -76,9 +101,9 @@ Apache Kylin has models to import to run TPC-H queries. You need to get that rep
 
 ```shell
 cd ~
-git clone https://github.com/Kyligence/kylin-tpch.git
+
 cd kylin-tpch
-./setup-kylin-model.sh 2
+./setup-kylin-model.sh 1
 ```
 
 The script also creates a few simple views on top of the original TPC-H tables to allow Kylin pre-calculate some complex measures. The resulted E-R model topology is identical to the original TPC-H model.
@@ -88,8 +113,14 @@ After that, enter the web UI and click `System` - `Reload Metadata` to refresh t
 After the operations above, you can run the benchmark to utilize kylin cubing as part of offline computation by configuring the test plans like this:
 ```yaml
   commands:
+    - path: /home/hadoop
+      command: git clone https://github.com/Kyligence/kylin-tpch.git
+    - path: /home/hadoop/kylin-tpch
+      command: sh ./setup-kylin-model.sh 1
     - path: /home/hadoop/OLAPBenchmark/lib
       command: python3 ./kylin_cubing.py
 ```
 
-You need to keep the tunnel connected to keep the session alive.
+Attention:
+1. Kylin requires database name in a format of `tpch_flat_orc_*`, * refers to the scale of TPC-H datasets. You also need to configure the scale size in the second command, like `sh ./setup-kylin-model.sh *`.
+2. You need to keep the tunnel connected to keep the session alive.
