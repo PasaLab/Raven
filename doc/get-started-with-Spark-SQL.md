@@ -19,9 +19,4 @@ git clone https://github.com/PasaLab/OLAPBenchmark
 To clone the benchmark, we need your GitHub account and password here.
 
 ## Configuration
-The configuration file is in `./config/engines/spark-sql.yaml`. Users can edit the name of the session, and put system-level configurations here. To integrate SparkSQL with Hive well on cloud, the following settings are necessary:
-```yaml
-  hive.metastore.uris: thrift://ip-a-b-c-d.YOURREGION.compute.internal:9083
-  spark.sql.warehouse.dir: hdfs://ip-a-b-c-d.YOURREGION.compute.internal:8020/user/hive/warehouse
-```
-Here, you need the internal DNS address of the master node, which can be found in `./cloud/instances`.
+The configuration file is in `./config/engines/spark-sql.yaml`. Users can edit the name of the session, and put system-level configurations here.
