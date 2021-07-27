@@ -18,7 +18,7 @@ class presto(engine):
             host=self.conf['host'],
             port=self.conf['port'],
             catalog='hive',
-            schema='tpch_flat_orc_2',
+            schema='tpch',
             user='hadoop'
         )
         self.logger.info("Launch presto complete.")
