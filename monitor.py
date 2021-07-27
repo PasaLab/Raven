@@ -295,6 +295,11 @@ if __name__ == '__main__':
                 start = item['start']
             if finish == -1 or (finish != -1 and item['finish'] > finish):
                 finish = item['finish']
+        for item in t['online']:
+            if start == -1 or (start != -1 and item['start'] < start):
+                start = item['start']
+            if finish == -1 or (finish != -1 and item['finish'] > finish):
+                finish = item['finish']
         if sys.argv[1] == '-1':
             logger.warning("Cluster ID not specified. Use current metrics directly.")
         else:
