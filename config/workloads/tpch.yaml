@@ -50,25 +50,154 @@ query:
   sql:
     - name: Q1
       description: Query 1
-      sql: select l_returnflag, l_linestatus, sum(l_quantity) as sum_qty, sum(l_extendedprice) as sum_base_price, sum(l_saleprice) as sum_disc_price, sum(l_saleprice) + sum(l_taxprice) as sum_charge, avg(l_quantity) as avg_qty, avg(l_extendedprice) as avg_price, avg(l_discount) as avg_disc, count(*) as count_order from v_lineitem where l_shipdate <= '1998-09-16' group by l_returnflag, l_linestatus order by l_returnflag, l_linestatus
+      dynamic:
+        - name: [DATE]
+          type: date
+          min: 1998-08-03
+          max: 1998-10-02
+      sql: select l_returnflag, l_linestatus, sum(l_quantity) as sum_qty, sum(l_extendedprice) as sum_base_price, sum(l_saleprice) as sum_disc_price, sum(l_saleprice) + sum(l_taxprice) as sum_charge, avg(l_quantity) as avg_qty, avg(l_extendedprice) as avg_price, avg(l_discount) as avg_disc, count(*) as count_order from v_lineitem where l_shipdate <= '[DATE]' group by l_returnflag, l_linestatus order by l_returnflag, l_linestatus
     - name: Q2
       description: Query 2
-      sql: with q2_min_ps_supplycost as ( select p_partkey as min_p_partkey, min(ps_supplycost) as min_ps_supplycost from v_partsupp inner join part on p_partkey = ps_partkey inner join supplier on s_suppkey = ps_suppkey inner join nation on s_nationkey = n_nationkey inner join region on n_regionkey = r_regionkey where r_name = 'EUROPE' group by p_partkey ) select s_acctbal, s_name, n_name, p_partkey, p_mfgr, s_address, s_phone, s_comment from v_partsupp inner join part on p_partkey = ps_partkey inner join supplier on s_suppkey = ps_suppkey inner join nation on s_nationkey = n_nationkey inner join region on n_regionkey = r_regionkey inner join q2_min_ps_supplycost on ps_supplycost = min_ps_supplycost and p_partkey = min_p_partkey where p_size = 37 and p_type like '%COPPER' and r_name = 'EUROPE' order by s_acctbal desc, n_name, s_name, p_partkey limit 100
+      dynamic:
+        - name: [SIZE]
+          type: numeric
+          min: 1
+          max: 50
+        - name: [TYPE]
+          type: enum
+          enum:
+            - TIN
+            - NICKEL
+            - BRASS
+            - STEEL
+            - COPPER
+        - name: [REGION]
+          type: enum
+          enum:
+            - AFRICA
+            - AMERICA
+            - ASIA
+            - EUROPE
+            - MIDDLE EAST
+      sql: with q2_min_ps_supplycost as ( select p_partkey as min_p_partkey, min(ps_supplycost) as min_ps_supplycost from v_partsupp inner join part on p_partkey = ps_partkey inner join supplier on s_suppkey = ps_suppkey inner join nation on s_nationkey = n_nationkey inner join region on n_regionkey = r_regionkey where r_name = 'EUROPE' group by p_partkey ) select s_acctbal, s_name, n_name, p_partkey, p_mfgr, s_address, s_phone, s_comment from v_partsupp inner join part on p_partkey = ps_partkey inner join supplier on s_suppkey = ps_suppkey inner join nation on s_nationkey = n_nationkey inner join region on n_regionkey = r_regionkey inner join q2_min_ps_supplycost on ps_supplycost = min_ps_supplycost and p_partkey = min_p_partkey where p_size = [SIZE] and p_type like '%[TYPE]' and r_name = '[REGION]' order by s_acctbal desc, n_name, s_name, p_partkey limit 100
     - name: Q3
       description: Query 3
-      sql: select l_orderkey, sum(l_saleprice) as revenue, o_orderdate, o_shippriority from v_lineitem inner join v_orders on l_orderkey = o_orderkey inner join customer on c_custkey = o_custkey where c_mktsegment = 'BUILDING' and o_orderdate < '1995-03-22' and l_shipdate > '1995-03-22' group by l_orderkey, o_orderdate, o_shippriority order by revenue desc, o_orderdate limit 10
+      dynamic:
+        - name: [DATE]
+          type: date
+          min: 1995-03-01
+          max: 1995-03-31
+        - name: [SEGMENT]
+          type: enum
+          enum:
+            - AUTOMOBILE
+            - BUILDING
+            - FURNITURE
+            - MACHINERY
+            - HOUSEHOLD
+      sql: select l_orderkey, sum(l_saleprice) as revenue, o_orderdate, o_shippriority from v_lineitem inner join v_orders on l_orderkey = o_orderkey inner join customer on c_custkey = o_custkey where c_mktsegment = '[SEGMENT]' and o_orderdate < '[DATE]' and l_shipdate > '[DATE]' group by l_orderkey, o_orderdate, o_shippriority order by revenue desc, o_orderdate limit 10
     - name: Q4
       description: Query 4
-      sql: select o_orderpriority, count(*) as order_count from ( select l_orderkey, o_orderpriority from v_lineitem inner join v_orders on l_orderkey = o_orderkey where o_orderdate >= '1996-05-01' and o_orderdate < '1996-08-01' and l_receiptdelayed = 1 group by l_orderkey, o_orderpriority ) t group by t.o_orderpriority order by t.o_orderpriority
+      dynamic:
+        - name: [MONTH]
+          type: month
+          min: 1993-01
+          max: 1997-10
+      sql: select o_orderpriority, count(*) as order_count from ( select l_orderkey, o_orderpriority from v_lineitem inner join v_orders on l_orderkey = o_orderkey where o_orderdate >= '[MONTH]-01' and o_orderdate < '[MONTH]-01' + interval '3' month and l_receiptdelayed = 1 group by l_orderkey, o_orderpriority ) t group by t.o_orderpriority order by t.o_orderpriority
     - name: Q5
       description: Query 5
-      sql: select sn.n_name, sum(l_saleprice) as revenue from v_lineitem inner join v_orders on l_orderkey = o_orderkey inner join customer on o_custkey = c_custkey inner join nation cn on c_nationkey = cn.n_nationkey inner join supplier on l_suppkey = s_suppkey inner join nation sn on s_nationkey = sn.n_nationkey inner join region on sn.n_regionkey = r_regionkey where r_name = 'AFRICA' and cn.n_name = sn.n_name and o_orderdate >= '1993-01-01' and o_orderdate < '1994-01-01' group by sn.n_name order by revenue desc
+      dynamic:
+        - name: [REGION]
+          type: enum
+          enum:
+            - AFRICA
+            - AMERICA
+            - ASIA
+            - EUROPE
+            - MIDDLE EAST
+        - name: [YEAR]
+          type: numeric
+          min: 1993
+          max: 1997
+      sql: select sn.n_name, sum(l_saleprice) as revenue from v_lineitem inner join v_orders on l_orderkey = o_orderkey inner join customer on o_custkey = c_custkey inner join nation cn on c_nationkey = cn.n_nationkey inner join supplier on l_suppkey = s_suppkey inner join nation sn on s_nationkey = sn.n_nationkey inner join region on sn.n_regionkey = r_regionkey where r_name = 'AFRICA' and cn.n_name = sn.n_name and o_orderdate >= '[YEAR]-01-01' and o_orderdate < '[YEAR]-01-01' + interval '1' year group by sn.n_name order by revenue desc
     - name: Q6
       description: Query 6
-      sql: select sum(l_extendedprice) - sum(l_saleprice) as revenue from v_lineitem where l_shipdate >= '1993-01-01' and l_shipdate < '1994-01-01' and l_discount between 0.06 - 0.01 and 0.06 + 0.01 and l_quantity < 25
+      dynamic:
+        - name: [YEAR]
+          type: numeric
+          min: 1993
+          max: 1997
+        - name: [DISCOUNT]
+          type: numeric
+          offset: -2
+          min: 2
+          max: 9
+        - name: [QUANTITY]
+          type: numeric
+          min: 24
+          max: 25
+      sql: select sum(l_extendedprice) - sum(l_saleprice) as revenue from v_lineitem where l_shipdate >= '[YEAR]-01-01' and l_shipdate < '[YEAR]-01-01' + interval '1' year and l_discount between [DISCOUNT] - 0.01 and [DISCOUNT] + 0.01 and l_quantity < [QUANTITY]
     - name: Q7
       description: Query 7
-      sql: select supp_nation, cust_nation, l_year, sum(volume) as revenue from ( select n1.n_name as supp_nation, n2.n_name as cust_nation, l_shipyear as l_year, l_saleprice as volume from v_lineitem inner join supplier on s_suppkey = l_suppkey inner join v_orders on l_orderkey = o_orderkey inner join customer on o_custkey = c_custkey inner join nation n1 on s_nationkey = n1.n_nationkey inner join nation n2 on c_nationkey = n2.n_nationkey where ( (n1.n_name = 'KENYA' and n2.n_name = 'PERU') or (n1.n_name = 'PERU' and n2.n_name = 'KENYA') ) and l_shipdate between '1995-01-01' and '1996-12-31' ) as shipping group by supp_nation, cust_nation, l_year order by supp_nation, cust_nation, l_year
+      dynamic:
+        - name: [NATION1]
+          type: enum
+          enum:
+            - ALGERIA
+            - ARGENTINA
+            - BRAZIL
+            - CANADA
+            - EGYPT
+            - ETHIOPIA
+            - FRANCE
+            - GERMANY
+            - INDIA
+            - INDONESIA
+            - IRAN
+            - IRAQ
+            - JAPAN
+            - JORDAN
+            - KENYA
+            - MOROCCO
+            - MOZAMBIQUE
+            - PERU
+            - CHINA
+            - ROMANIA
+            - SAUDI ARABIA
+            - VIETNAM
+            - RUSSIA
+            - UNITED KINGDOM
+            - UNITED STATES
+        - name: [NATION2]
+          type: enum
+          enum:
+            - ALGERIA
+            - ARGENTINA
+            - BRAZIL
+            - CANADA
+            - EGYPT
+            - ETHIOPIA
+            - FRANCE
+            - GERMANY
+            - INDIA
+            - INDONESIA
+            - IRAN
+            - IRAQ
+            - JAPAN
+            - JORDAN
+            - KENYA
+            - MOROCCO
+            - MOZAMBIQUE
+            - PERU
+            - CHINA
+            - ROMANIA
+            - SAUDI ARABIA
+            - VIETNAM
+            - RUSSIA
+            - UNITED KINGDOM
+            - UNITED STATES
+          except: [NATION1]
+      sql: select supp_nation, cust_nation, l_year, sum(volume) as revenue from ( select n1.n_name as supp_nation, n2.n_name as cust_nation, l_shipyear as l_year, l_saleprice as volume from v_lineitem inner join supplier on s_suppkey = l_suppkey inner join v_orders on l_orderkey = o_orderkey inner join customer on o_custkey = c_custkey inner join nation n1 on s_nationkey = n1.n_nationkey inner join nation n2 on c_nationkey = n2.n_nationkey where ( (n1.n_name = '[NATION1]' and n2.n_name = '[NATION2]') or (n1.n_name = '[NATION2]' and n2.n_name = '[NATION1]') ) and l_shipdate between '1995-01-01' and '1996-12-31' ) as shipping group by supp_nation, cust_nation, l_year order by supp_nation, cust_nation, l_year
     - name: Q8
       description: Query 8
       sql: with all_nations as ( select o_orderyear as o_year, l_saleprice as volume, n2.n_name as nation from v_lineitem inner join part on l_partkey = p_partkey inner join supplier on l_suppkey = s_suppkey inner join v_orders on l_orderkey = o_orderkey inner join customer on o_custkey = c_custkey inner join nation n1 on c_nationkey = n1.n_nationkey inner join nation n2 on s_nationkey = n2.n_nationkey inner join region on n1.n_regionkey = r_regionkey where r_name = 'AMERICA' and o_orderdate between '1995-01-01' and '1996-12-31' and p_type = 'ECONOMY BURNISHED NICKEL' ), peru as ( select o_year, sum(volume) as peru_volume from all_nations where nation = 'PERU' group by o_year ), all_data as ( select o_year, sum(volume) as all_volume from all_nations group by o_year ) select peru.o_year, peru_volume / all_volume as mkt_share from peru inner join all_data on peru.o_year = all_data.o_year
