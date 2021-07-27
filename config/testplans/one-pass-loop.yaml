@@ -3,14 +3,13 @@ offline:
   description: offline stage
   concurrency: 1
   commands:
-    - path: /home/hadoop/kylin-tpch
-      command: sh setup-kylin-model.sh 1
     - path: /home/hadoop/OLAPBenchmark/lib
-      command: python3 kylin_cubing.py
+      command: hive -f kylin-tpch-create-views.sql
 online:
   name: online
   description: online stage
   concurrency: 1
+  loop: 10
   queries:
     - Q1
     - Q2
