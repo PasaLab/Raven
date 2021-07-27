@@ -9,6 +9,7 @@ online:
   name: online
   description: online stage
   concurrency: 1
+  loop: 1
   queries:
     - Q1
     - Q2

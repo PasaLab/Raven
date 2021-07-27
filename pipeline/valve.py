@@ -75,21 +75,23 @@ class OnlineStage(Valve):
         self.queries = config['queries']
         self.isOnline = True
         self.concurrency = config['concurrency']
+        self.loop = config['loop']
 
     def run_thread(self, context, thread_id):
         context.engine.query(context.queries['database'])
-        for query in self.queries:
-            for matching_query in context.queries['sql']:
-                if matching_query['name'] == query:
-                    sql = matching_query['sql']
-                    start = time.time()
-                    if sql == 'sqls':
-                        sqls = matching_query['sqls']
-                        for sql in sqls:
+        for i in range(self.loop):
+            for query in self.queries:
+                for matching_query in context.queries['sql']:
+                    if matching_query['name'] == query:
+                        sql = matching_query['sql']
+                        start = time.time()
+                        if sql == 'sqls':
+                            sqls = matching_query['sqls']
+                            for sql in sqls:
+                                context.engine.query(sql)
+                        else:
                             context.engine.query(sql)
-                    else:
-                        context.engine.query(sql)
-                    finish = time.time()
-                    summary = {'threadID': str(thread_id), 'query': query, 'start': start, 'finish': finish}
-                    self.metrics.append(summary)
-                    self.logger.info("Execution of " + query + " complete.")
+                        finish = time.time()
+                        summary = {'threadID': str(thread_id), 'query': query, 'start': start, 'finish': finish}
+                        self.metrics.append(summary)
+                        self.logger.info("Execution of " + query + " complete.")
