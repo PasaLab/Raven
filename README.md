@@ -189,17 +189,7 @@ aws emr terminate-clusters --cluster-ids j-YOURCLUSTERID
 Your cluster ID is available in your command given above.
 
 ## Benchmark Demo
-<script src='//player.polyv.net/script/player.js'></script>
-<div id='plv_09626a691bfcd2ed7b4c6e8fc80a4c7d_0'></div>
-<script>
-var player = polyvPlayer({
-  'wrap':'#plv_09626a691bfcd2ed7b4c6e8fc80a4c7d_0',
-  'width':'960',
-  'height':'540',
-  'vid': '09626a691bfcd2ed7b4c6e8fc80a4c7d_0',
-  'playsafe': ''
-});
-</script>
+<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="960" height="540" id="polyvplayer09626a691bfcd2ed7b4c6e8fc80a4c7d_0"><PARAM NAME=movie VALUE="//player.polyv.net/videos/player.swf" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="Transparent" /><param name="flashvars" value="vid=09626a691bfcd2ed7b4c6e8fc80a4c7d_0" /><param name="allowFullScreen" value="true" /><EMBED src="//player.polyv.net/videos/player.swf" width="960" height="540"  TYPE="application/x-shockwave-flash" allowscriptaccess="always" wmode="Transparent" name="polyvplayer09626a691bfcd2ed7b4c6e8fc80a4c7d_0" allowFullScreen="true" flashvars="vid=09626a691bfcd2ed7b4c6e8fc80a4c7d_0"></EMBED></OBJECT>
 
 ## Contributing
 // TODO
