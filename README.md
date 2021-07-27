@@ -197,7 +197,7 @@ var player = polyvPlayer({
   'width':'960',
   'height':'540',
   'vid': '09626a691bfcd2ed7b4c6e8fc80a4c7d_0',
-  'playsafe': '' // 播放加密视频的凭证, 取值参考文档: http://dev.polyv.net/?p=16673 
+  'playsafe': ''
 });
 </script>
 
