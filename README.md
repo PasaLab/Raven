@@ -189,7 +189,7 @@ aws emr terminate-clusters --cluster-ids j-YOURCLUSTERID
 Your cluster ID is available in your command given above.
 
 ## Benchmark Demo
-// TODO
+<iframe style='width: 600px;height: 338px' frameborder='no' allowfullscreen mozallowfullscreen webkitallowfullscreen src='http://go.plvideo.cn/front/video/preview?vid=09626a691bfcd2ed7b4c6e8fc80a4c7d_0'></iframe>
 
 ## Contributing
 // TODO
