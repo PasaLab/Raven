@@ -4,7 +4,7 @@ import yaml
 import numpy as np
 import sys
 from lib.Logger import Logger
-import matplotlib.pyplot as plt
+import time
 
 
 def get_metrics(cid, start, end):
@@ -304,6 +304,33 @@ if __name__ == '__main__':
         with open("./metrics/metrics", 'r', encoding='utf-8') as f:
             m = json.loads(f.read().replace("'", "\""))
         score = analyze(m, t)
+
+        ce = boto3.client('ce')
+        response = ce.get_cost_and_usage(
+            TimePeriod={
+                'Start': time.strftime("%Y-%m-%d", time.localtime(start)),
+                'End': time.strftime("%Y-%m-%d", time.localtime(finish + 86400))
+            },
+            Granularity='DAILY',
+            Metrics=[
+                'UNBLENDED_COST',
+            ]
+        )
+        costs = []
+        for entry in response['ResultsByTime']:
+            record = entry['Total']['UnblendedCost']
+            shown = False
+            for cost in costs:
+                if cost['Unit'] == record['Unit']:
+                    cost['Amount'] += record['Amount']
+                    shown = True
+                    break
+            if not shown:
+                costs.append(record)
+        logger.info("--------------------------------")
+        logger.info("Total cost:")
+        for cost in costs:
+            logger.info(str(cost['Amount']) + " " + str(cost['Unit']))
         logger.info("--------------------------------")
         logger.info("Benchmark finished.")
         logger.info("--------------------------------")
