@@ -33,16 +33,6 @@ class kylin(engine):
         start = time.time()
         response = requests.request("POST", url, data=payload, headers=headers)
         end = time.time()
-        message = json.loads(response.text)
-        for result in message['results']:
-            first_cell = True
-            for cell in result:
-                if first_cell:
-                    print(cell, end="")
-                    first_cell = False
-                else:
-                    print("\t" + cell, end="")
-            print("")
         return end - start
 
     def stop(self):
