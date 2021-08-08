@@ -96,7 +96,7 @@ sudo chmod -R 777 /tmp
 After that, clone our benchmark to the instance:
 ```shell
 cd ~
-git clone https://github.com/PasaLab/OLAPBenchmark
+git clone https://github.com/PasaLab/Raven
 ```
 To clone the benchmark, we need your GitHub account and password here.
 
