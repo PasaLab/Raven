@@ -1,4 +1,4 @@
-# OLAP Benchmark
+# Raven
 ## Feature
 // TODO
 
@@ -29,9 +29,9 @@ You need to input your `AWS Access Key ID` and `AWS Secret Access Key` here. You
 Download this Benchmark with a git command:
 
 ```shell
-git clone https://github.com/PasaLab/OLAPBenchmark.git
+git clone https://github.com/PasaLab/Raven.git
 
-cd OLAPBenchmark
+cd Raven
 ```
 
 You need to input your username and password of GitHub to download it.
@@ -117,8 +117,8 @@ Switch to your machine, use `scp` command to send configured project to your mac
 
 ```shell
 # in your benchmark directory
-scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/OLAPBenchmark/config ./
-scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/OLAPBenchmark/cloud/cwaconfig.json ./cloud/
+scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/Raven/config ./
+scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/Raven/cloud/cwaconfig.json ./cloud/
 ```
 Public DNS address of the master node of the cluster is needed.
 
@@ -126,7 +126,7 @@ Then, send these files to slave nodes of the cluster.
 ```shell
 # in your benchmark directory
 cd ..
-scp -i ./OLAPBenchmark/cloud/YOURPEM.pem -r ./OLAPBenchmark hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/
+scp -i ./Raven/cloud/YOURPEM.pem -r ./Raven hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/
 ```
 Public DNS addresses of the slave nodes of the cluster is needed.
 
@@ -134,7 +134,7 @@ Public DNS addresses of the slave nodes of the cluster is needed.
 Use the following command to generate the workloads:
 ```shell
 # on master node
-cd ~/OLAPBenchmark
+cd ~/Raven
 python3 main.py generate
 ```
 
@@ -142,13 +142,13 @@ python3 main.py generate
 Launch `CWAgent` on all machines of the cluster:
 ```shell
 # on all machines of the cluster
-sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/hadoop/OLAPBenchmark/cloud/cwaconfig.json
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/hadoop/Raven/cloud/cwaconfig.json
 ```
 
 Then, launch the benchmark on the master node:
 ```shell
 # on master node
-cd ~/OLAPBenchmark
+cd ~/Raven
 python3 main.py run
 ```
 The user needs to remember the time when the benchmark starts and finishes.
@@ -166,8 +166,8 @@ Users could use `scp` command to download those timestamps to your machine:
 ```shell
 # in your benchmark directory
 mkdir metrics
-scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/OLAPBenchmark/offline_times ./metrics/
-scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/OLAPBenchmark/online_times ./metrics/
+scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/Raven/offline_times ./metrics/
+scp -i ./cloud/YOURPEM.pem -r hadoop@ec2-a-b-c-d.YOURREGION.compute.amazonaws.com:~/Raven/online_times ./metrics/
 ```
 
 Other metrics can be collected when running the calculation script. It will also be saved in `./metrics/metric`.
